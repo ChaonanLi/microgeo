@@ -29,8 +29,7 @@ is `rf`, which means a `Random Forest` model.}
 
 \item{type}{Type of ML model. Select one from `regression` and `classification`. Default is `regression`.}
 
-\item{testing.ratio}{How many samples would be applied for testing? For example, if it is `0.2` ( 20% of all samples ),
-then 80% of all samples would be used for model training. Default is `0.2`.}
+\item{testing.ratio}{How many samples would be applied for testing? Default is `0.2`.}
 
 \item{threads}{Threads used for model training (logical CPUs). Default is `60`.}
 

@@ -14,8 +14,7 @@
 #' @param method ML method. Please see `http://topepo.github.io/caret/train-models-by-tag.html` for more options. Default
 #' is `rf`, which means a `Random Forest` model.
 #' @param type Type of ML model. Select one from `regression` and `classification`. Default is `regression`.
-#' @param testing.ratio How many samples would be applied for testing? For example, if it is `0.2` ( 20% of all samples ),
-#' then 80% of all samples would be used for model training. Default is `0.2`.
+#' @param testing.ratio How many samples would be applied for testing? Default is `0.2`.
 #' @param threads Threads used for model training (logical CPUs). Default is `60`.
 #' @param remove.outlier Whether to remove those outliers before creating a machine learning model? If it is `TRUE`, only
 #' those values (<y.data>) ranging from `lower quartile - 1.5 × interquartile` to `upper quartile + 1.5 × interquartile`
@@ -30,7 +29,8 @@
 #'   \item{\code{object$train.dat}}{A `data.frame` of training data for ML model.}
 #'   \item{\code{object$var.name}}{Name of variable used for ML modeling.}
 #' }
-#' @seealso \code{\link[caret:train]{caret::train()}}
+#' @seealso
+#' \code{\link[caret:train]{caret::train()}}
 #' \code{\link[microgeo:read_aliyun_map]{microgeo::read_aliyun_map()}}
 #' \code{\link[microgeo:create_dataset]{microgeo::create_dataset()}}
 #' \code{\link[microgeo:show_dataset]{microgeo::show_dataset()}}
