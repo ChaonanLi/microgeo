@@ -1,0 +1,11 @@
+.Rbuildignore
+.RData
+microgeo.Rproj
+.Rhistory
+.Rproj.user
+.Ruserdata
+.DS_Store
+dev
+test
+.ipynb_checkpoints
+tutorial.ipynb

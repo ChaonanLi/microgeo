@@ -1,0 +1,51 @@
+Package: microgeo
+Type: Package
+Title: Microbial geographic data analysis
+Version: 0.1.1
+Authors@R: c(person("Chaonan", "Li", role = c("aut", "cre"), email = "licn@mtc.edu.cn"),
+             person("Haijun", "Liao", role = "ctb", email = "liaohj@mtc.edu.cn"),
+             person("Xiangzhen", "Li", role = "ctb", email = "lixz2015@163.com"))
+Author: Chaonan Li [aut, cre], Haijun Liao [ctb], Xiangzhen Li [ctb]
+Maintainer: Chaonan Li <licn@mtc.edu.cn>
+Description: An R package putting microbial traits on a geographic map.
+URL: https://github.com/ChaonanLi/microgeo
+License: BSD 3-Clause License
+LazyData: true
+Encoding: UTF-8
+NeedsCompilation: no
+RoxygenNote: 7.2.3
+Imports: magrittr,ggplot2
+Suggests:
+    R (>= 4.1.2),
+    psych (>= 2.3.6),
+    vegan (>= 2.6.4),
+    picante (>= 1.8.2),
+    GUniFrac (>= 1.7),
+    iCAMP (>= 1.5.12),
+    showtext (>= 0.9.6),
+    RColorBrewer (>= 1.1.3),
+    terra (>= 1.7.46),
+    geodata (>= 0.5.8),
+    sf (>= 1.0.14),
+    dplyr (>= 1.1.3),
+    sp (>= 2.0.0),
+    rgdal (>= 1.6.7),
+    raster (>= 3.6.23),
+    rgeos (>= 0.6.4),
+    randomcoloR (>= 1.1.0.1),
+    tidyterra (>= 0.4.0),
+    ggspatial (>= 1.1.9),
+    ggplot2 (>= 3.4.3),
+    ggnewscale (>= 0.4.9),
+    ape (>= 5.7.1),
+    cli (>= 3.6.1),
+    gstat (>= 2.1.1),
+    caret (>= 6.0.94),
+    parallel (>= 4.1.2),
+    doParallel (>= 1.0.17),
+    multiROC (>= 1.1.1),
+    httr (>= 1.4.7),
+    utils (>= 4.1.2),
+    MODIS (>= 1.2.11),
+    magrittr (>= 2.0.3),
+    snow (>= 0.4.4)
