@@ -384,8 +384,9 @@ interp_kri = function(map, met, dat, var, model = c('Mat', 'Exp', 'Sph', 'Gau'),
     use.dat <- get_interpolation_data(met = met, dat = dat, var = var, trim.dup = trim.dup)
     use.dat.sf <- sf::st_as_sf(use.dat, coords = c("longitude", "latitude"), crs = map.crs)
     use.dat.sp <- sf::as_Spatial(use.dat.sf); use.dat.sf.xy <- as(use.dat.sf, "Spatial")
-    use.dat.sf.xy <- sp::spTransform(use.dat.sf.xy, terra::crs(use.dat.sp))
-    sp::proj4string(grd) <- as.character(terra::crs(use.dat.sp))
+    use.dat.sp.crs <- terra::crs(terra::vect(use.dat.sp), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
+    use.dat.sf.xy <- sp::spTransform(use.dat.sf.xy, use.dat.sp.crs)
+    sp::proj4string(grd) <- use.dat.sp.crs
     use.dat.sf.xy@bbox <- sf::as_Spatial(map.sfs)@bbox
     use.dat.sf.xy$X <- sp::coordinates(use.dat.sf.xy)[,1]
     use.dat.sf.xy$Y <- sp::coordinates(use.dat.sf.xy)[,2]
@@ -403,7 +404,7 @@ interp_kri = function(map, met, dat, var, model = c('Mat', 'Exp', 'Sph', 'Gau'),
         p.krig <- gstat::krige(formula = target ~ 1, locations = use.dat.sf.xy, newdata = grd,
                                model = p.model.variog, ...)
         r <- raster::raster(p.krig); r.m <- raster::mask(r, sf::as_Spatial(map.sfs)) %>% terra::rast()
-        terra::crs(r.m) <- as.character(terra::crs(map)); names(r.m) <- var
+        terra::crs(r.m) <- map.crs; names(r.m) <- var
         return(r.m)
     }
 }

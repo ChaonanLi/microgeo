@@ -65,7 +65,7 @@ get_ai = function(dataset, out.dir = "microgeo_data"){
     map.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
     if (is.na(ais.crs) | ais.crs != map.crs){
         paste0("reprojecting the CRS of SpatRaster to epsg:", map.crs, ", it takes a while...") %>% show_comm_msg()
-        ais <- terra::project(ais, as.character(terra::crs(dataset$map)))
+        ais <- terra::project(ais, map.crs)
     }
     ais <- terra::crop(ais, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map))
     names(ais) <- "AI"; ais <- ais * 1e-04
@@ -134,7 +134,7 @@ get_elev = function(dataset, res = c(10, 5, 2.5, 0.5), out.dir = "microgeo_data"
     map.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
     if (is.na(ele.crs) | ele.crs != map.crs){
         paste0("reprojecting the CRS of SpatRaster to epsg:", map.crs, ", it takes a while...") %>% show_comm_msg()
-        ele <- terra::project(ele, as.character(terra::crs(dataset$map)))
+        ele <- terra::project(ele, map.crs)
     }
     ele <- terra::crop(ele, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map))
     names(ele) <- "ELEV"; dataset %<>% merge_spat_raster(spat.rast = ele)
@@ -217,7 +217,7 @@ get_his_bioc = function(dataset, res = c(10, 5, 2.5, 0.5), out.dir = "microgeo_d
     map.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
     if (is.na(bio.crs) | bio.crs != map.crs){
         paste0("reprojecting the CRS of SpatRaster to epsg:", map.crs, ", it takes a while...") %>% show_comm_msg()
-        bio <- terra::project(bio, as.character(terra::crs(dataset$map)))
+        bio <- terra::project(bio, map.crs)
     }
     bio <- terra::crop(bio, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map))
     names(bio) <- paste0("Bio", seq(19))
@@ -319,7 +319,7 @@ get_fut_bioc = function(dataset, gcm = c("BCC-CSM2-MR", "ACCESS-CM2", "CNRM-CM6-
         if (is.na(dnrst.crs) | dnrst.crs != mapss.crs){
             paste0("reprojecting the CRS of SpatRaster to epsg:", mapss.crs, ", it takes a while...") %>%
                 show_comm_msg()
-            dnrst <- terra::project(dnrst, as.character(terra::crs(dataset$map)))
+            dnrst <- terra::project(dnrst, map.crs)
         }
         dnrst <- terra::crop(dnrst, terra::ext(dataset$map)) %>%
             terra::mask(., terra::vect(dataset$map)); names(dnrst) <- paste0("Bio", seq(19))
@@ -423,7 +423,7 @@ get_modis_num_metrics = function(dataset, username, password, measures = c("NDVI
         maps.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
         if (is.na(plnt.crs) | plnt.crs != maps.crs){
             paste0("reprojecting the CRS of SpatRaster to epsg:", maps.crs, ", it takes a while...") %>% show_comm_msg()
-            tmp.plnt <- terra::project(tmp.plnt, as.character(terra::crs(dataset$map)))
+            tmp.plnt <- terra::project(tmp.plnt, maps.crs)
         }
         tmp.plnt <- terra::crop(tmp.plnt, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map))
         names(tmp.plnt) <- mea; dataset %<>% merge_spat_raster(spat.rast = tmp.plnt)
@@ -479,7 +479,7 @@ get_modis_num_metrics = function(dataset, username, password, measures = c("NDVI
 #'
 #' # Download classification MODIS metrics of research region
 #' dataset.dts %<>% get_modis_cla_metrics(username = "username",
-#'                                        password = "password", out.dir = "test/microgeo_data")
+#'                                        password = "password", out.dir = "test/microgeo_data11")
 #' dataset.dts %>% show_dataset()
 #'
 #' # Visualize LC_Type1
@@ -517,7 +517,7 @@ get_modis_cla_metrics = function(dataset, username, password, measures = "LC_Typ
         maps.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
         if (is.na(plnt.crs) | plnt.crs != maps.crs){
             paste0("reprojecting the CRS of SpatRaster to epsg:", maps.crs, ", it takes a while...") %>% show_comm_msg()
-            tmp.plnt <- terra::project(tmp.plnt, as.character(terra::crs(dataset$map)))
+            tmp.plnt <- terra::project(tmp.plnt, maps.crs)
         }
         tmp.plnt <- terra::crop(tmp.plnt, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map))
         names(tmp.plnt) <- mea; dataset %<>% merge_spat_raster(spat.rast = terra::as.factor(tmp.plnt), type = 'cla')
@@ -610,7 +610,7 @@ get_soilgrid = function(dataset, measures = c("bdod", "cfvo", "nitrogen", "phh2o
         map.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
         if (spa.crs %>% is.na | spa.crs != map.crs){
             paste0("reprojecting the CRS of SpatRaster to epsg:", map.crs, ", it takes a while...") %>% show_comm_msg()
-            soilrst <- terra::project(soilrst, as.character(terra::crs(dataset$map)))
+            soilrst <- terra::project(soilrst, map.crs)
         }
         soilrst <- terra::crop(soilrst, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map))
         names(soilrst) <- mea; dataset %<>% merge_spat_raster(spat.rast = soilrst)
@@ -721,7 +721,7 @@ get_soilcn = function(dataset, measures = c("PH", "SOM", "TN", "TP", "TK", "AN",
         map.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
         if (spa.crs %>% is.na | spa.crs != map.crs){
             paste0("reprojecting the CRS of SpatRaster to epsg:", map.crs, ", it takes a while...") %>% show_comm_msg()
-            soilrst <- terra::project(soilrst, as.character(terra::crs(dataset$map)))
+            soilrst <- terra::project(soilrst, map.crs)
         }
         soilrst <- terra::crop(soilrst, terra::ext(dataset$map)) %>% terra::mask(., terra::vect(dataset$map)) %>%
             suppressWarnings()

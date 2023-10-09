@@ -159,15 +159,15 @@ check_spatraster = function(spat.raster, arg.name = NULL){
 #' @param map Geographic map with a class of `SpatialPolygonsDataFrame`.
 check_merging_data = function(dat, met, map){
     met %>% check_metdata(lon = 'longitude', lat = 'latitude')
-    check.length <- unique(dat %>% rownames == met %>% rownames) %>% length
-    check.logics <- !unique(dat %>% rownames == met %>% rownames)
+    check.length <- unique(rownames(dat) == rownames(met)) %>% length
+    check.logics <- !unique(rownames(dat) == rownames(met))
     if (check.length > 1 || check.logics) 'Sample ids in <dat> can not be matched to those in <met>!' %>% stop()
     is.matrix <- ifelse((dat %>% is.matrix || dat %>% is.data.frame) &&
                             isSymmetric(dat %>% as.matrix %>% unname), TRUE, FALSE)
     if (is.matrix){
-        check.length <- unique(dat %>% colnames == met %>% rownames) %>% length()
-        check.logics <- !unique(dat %>% colnames == met %>% rownames)
-        if (check.length > 1 | check.logics) 'Sample ids in <dat> can not be matched to those in <met>!' %>% stop()
+        check.length <- unique(colnames(dat) == rownames(met)) %>% length()
+        check.logics <- !unique(colnames(dat) == rownames(met))
+        if (check.length > 1 || check.logics) 'Sample ids in <dat> can not be matched to those in <met>!' %>% stop()
     }
     map %>% check_mapdata()
     if (!'NAME' %in% names(map@data)) "Invalid `SpatialPolygonsDataFrame`!" %>% stop()
