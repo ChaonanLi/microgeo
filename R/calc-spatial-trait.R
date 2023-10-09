@@ -596,7 +596,16 @@ get_soilgrid = function(dataset, measures = c("bdod", "cfvo", "nitrogen", "phh2o
     pat.soil <- create_dir(dirpath = file.path(out.dir, "soilgrid_products"))
     depth <- ifelse(depth %>% length > 1, depth[1], depth)
     for (mea in measures) {
-        soilrst <- geodata::soil_world(var = mea, depth = depth, stat = "mean", path = pat.soil)
+        valid.depth <- c(0, 5, 15, 30, 60, 100, 200)
+        depth.str <- paste0(valid.depth[which(valid.depth == depth) - 1], "-",
+                            valid.depth[which(valid.depth == depth)], "cm")
+        tif.filename <- paste0(mea, "_", depth.str, "_mean_30s.tif")
+        tif.path <- file.path(pat.soil, "soil_world", tif.filename)
+        if (!file.exists(tif.path)){
+            soilrst <- geodata::soil_world(var = mea, depth = depth, stat = "mean", path = pat.soil)
+        }else{
+            soilrst <- terra::rast(tif.path)
+        }
         spa.crs <- terra::crs(soilrst, proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
         map.crs <- terra::crs(terra::vect(dataset$map), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6]
         if (spa.crs %>% is.na | spa.crs != map.crs){
