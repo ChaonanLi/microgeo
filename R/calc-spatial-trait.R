@@ -479,7 +479,7 @@ get_modis_num_metrics = function(dataset, username, password, measures = c("NDVI
 #'
 #' # Download classification MODIS metrics of research region
 #' dataset.dts %<>% get_modis_cla_metrics(username = "username",
-#'                                        password = "password", out.dir = "test/microgeo_data11")
+#'                                        password = "password", out.dir = "test/microgeo_data")
 #' dataset.dts %>% show_dataset()
 #'
 #' # Visualize LC_Type1

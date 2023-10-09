@@ -48,9 +48,9 @@
 #' @export
 calc_rel_abund = function(dataset, use.perct = TRUE){
     dataset %>% check_dataset(); mat <- dataset$mat; ant <- dataset$ant; met <- dataset$met
-    check.length <- unique(mat %>% rownames == ant %>% rownames) %>% length
-    check.logics <- !unique(mat %>% rownames == ant %>% rownames)
-    if (check.length > 1 | check.logics) stop('The ASV/gene ids in <mat> can not be matched to those in <ant>!')
+    check.length <- unique(rownames(mat) == rownames(ant)) %>% length
+    check.logics <- !unique(rownames(mat) == rownames(ant))
+    if (check.length > 1 || check.logics) stop('The ASV/gene ids in <mat> can not be matched to those in <ant>!')
     classifications <- colnames(ant)
     abund.res <- lapply(classifications, function(classification){
         abund.agg <- aggregate(mat, by = list(ant[,which(colnames(ant) == classification)]), FUN = sum)
