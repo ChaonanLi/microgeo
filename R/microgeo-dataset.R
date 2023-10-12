@@ -179,8 +179,9 @@ rarefy_count_table = function(dataset, depth = NULL){
     dataset %>% check_dataset(); mat.dat <- dataset$mat
     min.seq.num <- mat.dat %>% colSums() %>% min()
     if (depth %>% is.null) depth <- min.seq.num
-    if (depth > min.seq.num) paste0("The <depth> must be less than or equal to ", min.seq.num, "!") %>% stop()
+    #if (depth > min.seq.num) paste0("The <depth> must be less than or equal to ", min.seq.num, "!") %>% stop()
     rarefy.res <- dataset$mat %>% t() %>% vegan::rrarefy(., depth) %>% suppressWarnings() %>% t()
+    rarefy.res <- rarefy.res[,colSums(rarefy.res) >= depth]
     paste0("the ASV/gene abundance table has been rarefied with a sub-sample depth of ", depth) %>% show_comm_msg()
     rarefy.res  <- rarefy.res[rarefy.res %>% apply(., 1, sum) > 0,]
     rarefy.res  <- rarefy.res[,rarefy.res %>% apply(., 2, sum) > 0]
