@@ -541,13 +541,13 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
         }
     }
     if (colors %>% length == 1 && colors == 'auto') { # Automatically generate colors
-        if (terra::is.factor(spat.raster) | !breaks %>% is.null){
+        if (terra::is.factor(spat.raster) || !breaks %>% is.null){
             colors <- RColorBrewer::brewer.pal(11, "RdYlGn")[c(1,3,5,9,11)] %>% rev()
         }else{
             colors <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlGn"))(100) %>% rev()
         }
     }
-    if (!terra::is.factor(spat.raster) & breaks %>% is.null){
+    if (!terra::is.factor(spat.raster) && breaks %>% is.null){
         if (spat.raster %>% names %>% length == 1) {
             map.layer <- map.layer + tidyterra::geom_spatraster(data = spat.raster) %>% suppressMessages() +
                 scale_fill_gradientn(name = ifelse(legend.title %>% is.null, spat.raster %>% names, legend.title),

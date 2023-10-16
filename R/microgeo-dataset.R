@@ -235,13 +235,24 @@ tidy_dataset = function(dataset){
     # ASV/gene abundance table
     dataset %>% check_dataset()
     if (!dataset$spa$tabs %>% is.null){
-        sam.ord <- Reduce(intersect,
-                          list(dataset$mat %>% colnames, dataset$met %>% rownames,
-                               dataset$env %>% rownames, dataset$spa$tabs %>% rownames))
+        if (!dataset$env %>% is.null){
+            sam.ord <- Reduce(intersect,
+                              list(dataset$mat %>% colnames, dataset$met %>% rownames,
+                                   dataset$env %>% rownames, dataset$spa$tabs %>% rownames))
+        }else{
+            sam.ord <- Reduce(intersect,
+                              list(dataset$mat %>% colnames, dataset$met %>% rownames,
+                                   dataset$spa$tabs %>% rownames))
+        }
     }else{
-        sam.ord <- Reduce(intersect,
-                          list(dataset$mat %>% colnames, dataset$met %>% rownames,
-                               dataset$env %>% rownames))
+        if (!dataset$env %>% is.null){
+            sam.ord <- Reduce(intersect,
+                              list(dataset$mat %>% colnames, dataset$met %>% rownames,
+                                   dataset$env %>% rownames))
+        }else{
+            sam.ord <- Reduce(intersect,
+                              list(dataset$mat %>% colnames, dataset$met %>% rownames))
+        }
     }
     mat.dat <- dataset$mat
     mat.idx <- sapply(sam.ord, function(x){ which(mat.dat %>% colnames == x) })
