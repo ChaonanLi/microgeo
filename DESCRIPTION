@@ -14,7 +14,7 @@ LazyData: true
 Encoding: UTF-8
 NeedsCompilation: no
 RoxygenNote: 7.2.3
-Depends: R (>= 4.1.2)
+Depends: R (>= 3.5.0)
 Imports: magrittr,ggplot2
 Suggests:
     psych (>= 2.3.6),
