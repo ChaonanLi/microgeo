@@ -14,7 +14,7 @@ LazyData: true
 Encoding: UTF-8
 NeedsCompilation: no
 RoxygenNote: 7.2.3
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.0.2)
 Imports: 
     magrittr (>= 2.0.3),
     ggplot2 (>= 3.4.3),
@@ -28,9 +28,9 @@ Imports:
     geodata (>= 0.5.8),
     sf (>= 1.0.14),
     sp (>= 2.0.0),
-    rgdal (>= 1.6.7),
+    rgdal (>= 1.5.18),
     raster (>= 3.6.23),
-    rgeos (>= 0.6.4),
+    rgeos (>= 0.5.9),
     randomcoloR (>= 1.1.0.1),
     tidyterra (>= 0.4.0),
     ggspatial (>= 1.1.9),
