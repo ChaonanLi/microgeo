@@ -8,4 +8,4 @@ microgeo.Rproj
 dev
 test
 .ipynb_checkpoints
-
+*.ipynb
