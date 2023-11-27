@@ -99,6 +99,7 @@ create_ml_model = function(y.data, x.data, var, method = 'rf', type = c('regress
     if (class(y.data) != "data.frame") stop("The <y.data> must be a dataframe!")
     if (class(x.data) != "data.frame") stop("The <x.data> must be a dataframe!")
     if (!var %in% colnames(y.data)) paste0('Can not find `', var, '` in <y.data>, please check it!') %>% stop()
+    type <- ifelse(length(type) == 1, type, type[1])
     if (type == 'regression' && !is.numeric(y.data[,var])) {
         paste0('The `', var, '` in <y.data> should be numeric if the <type> is `regression`!') %>% stop()
     }
