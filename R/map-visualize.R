@@ -88,9 +88,9 @@ plot_bmap = function(map, var = NULL, ord = NULL, fill = NA, color = 'gray30', w
     }
 
     # Automatically generate color values if `fill == 'auto' and `var != NULL`
-    if (!is.na(fill) && fill == 'auto' && !is.null(var) && is.numeric(map@data[,var])){
+    if (any(!is.na(fill)) && fill == 'auto' && !is.null(var) && is.numeric(map@data[,var])){
         fill <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlGn"))(cla.len) %>% rev()
-    }else if (!is.na(fill) && fill == 'auto' && !is.null(var) &&
+    }else if (any(!is.na(fill)) && fill == 'auto' && !is.null(var) &&
         (is.character(map@data[,var]) || is.factor(map@data[,var]))){
         fill <- randomcoloR::randomColor(count = cla.len)
     }
@@ -105,8 +105,8 @@ plot_bmap = function(map, var = NULL, ord = NULL, fill = NA, color = 'gray30', w
         if (fill %>% length == 1 && fill %>% is.na) msg %>% stop()
         if (map@data[,var] %>% is.character | map@data[,var] %>% is.factor){
             if (fill %>% length < cla.len) paste0('Requires at least ', cla.len, ' color values!') %>% stop()
-            if (ord %>% is.null) p.map <- p.map + scale_fill_manual(name = var, values = fill)
-            if (!ord %>% is.null) p.map <- p.map + scale_fill_manual(name = var, values = fill, breaks = ord)
+            if (any(ord %>% is.null)) p.map <- p.map + scale_fill_manual(name = var, values = fill)
+            if (any(!ord %>% is.null)) p.map <- p.map + scale_fill_manual(name = var, values = fill, breaks = ord)
         }else if (map@data[,var] %>% is.numeric){
             p.map <- p.map + scale_fill_gradientn(name = var, colours = fill, na.value = 'transparent')
         }else{
