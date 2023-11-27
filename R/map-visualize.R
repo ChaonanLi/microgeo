@@ -88,12 +88,11 @@ plot_bmap = function(map, var = NULL, ord = NULL, fill = NA, color = 'gray30', w
     }
 
     # Automatically generate color values if `fill == 'auto' and `var != NULL`
-    if (!fill %>% is.na && fill == 'auto' &&
-        !var %>% is.null && map@data[,var] %>% is.numeric){
+    if (!is.na(fill) && fill == 'auto' && !is.null(var) && is.numeric(map@data[,var])){
         fill <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlGn"))(cla.len) %>% rev()
     }
-    if (!fill %>% is.na && fill == 'auto' && !var %>% is.null &&
-        (map@data[,var] %>% is.character || map@data[,var] %>% is.factor)){
+    if (!is.na(fill) && fill == 'auto' && !is.null(var) &&
+        (is.character(map@data[,var]) || is.factor(map@data[,var]))){
         fill <- randomcoloR::randomColor(count = cla.len)
     }
 
