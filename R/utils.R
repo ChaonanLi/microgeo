@@ -34,7 +34,7 @@ show_exis_war = function(filepath){
 #' @param str A string indicating the position of results in the microgeo dataset.
 show_stat_msg = function(str){
     list(color = "#33FF00") %>% list(span.emph = .) %>% cli::cli_div(theme = .)
-    msg <- "] {.emph {prefix}} ==> new results have been saved to: object$"
+    msg <- "] {.emph {prefix}} ==> results have been saved to: object$"
     prefix <- "SAVE"; paste0("[", Sys.time(), msg, str) %>% cli::cli_alert_success()
 }
 
@@ -42,11 +42,11 @@ show_stat_msg = function(str){
 #' @param filepath A file path to be shown.
 show_load_msg = function(filepath){
     list(color = "#33FF00") %>% list(span.emph = .) %>% cli::cli_div(theme = .)
-    msg <- "] {.emph {prefix}} ==> old results have been loaded from: {.path {filepath}}"
+    msg <- "] {.emph {prefix}} ==> results have been loaded from: {.path {filepath}}"
     prefix <- "LOAD"; paste0("[", Sys.time(), msg) %>% cli::cli_alert_success()
 }
 
-#' @description Create a directory based on the specified path.
+#' @description Create a directory according to specified path.
 #' @param dirpath A directory path to be created.
 #' @param recursive Should elements of the path other than the last be created? Default is `TRUE`.
 #' @return A created directory path.
@@ -58,18 +58,18 @@ create_dir = function(dirpath, recursive = TRUE){
 #' @description Check the class of a geographic map dataset.
 #' @param map A geographic map dataset. It is expected to be a `SpatialPolygonsDataFrame`.
 check_mapdata = function(map){
-    if (map %>% class != 'SpatialPolygonsDataFrame') 'The <map> should be a `SpatialPolygonsDataFrame`!' %>% stop()
-    msg <- "The <map> should be a `SpatialPolygonsDataFrame` returned by `microgeo::read_aliyun_map()`,
+    if (map %>% class != 'SpatialPolygonsDataFrame') 'The <map> must be a `SpatialPolygonsDataFrame`!' %>% stop()
+    msg <- "The <map> must be a `SpatialPolygonsDataFrame` returned by `microgeo::read_aliyun_map()`,
     `microgeo::trans_map_fmt()`, `microgeo::grid_map()` or `merge_*_to_map()`!"
     if (!'FMTS' %in% names(map@data) || map@data$FMTS %>% unique != 'microgeo') msg %>% stop()
 }
 
 #' @description Check the esential elements of a metadata table.
-#' @param met A data.frame of sample information. Row names are sample ids while the column names are observed variables.
-#' @param lon Column name of longitude in `met`. Default is `longitude`.
-#' @param lat Column name of latitude in `met`. Default is `latitude`.
+#' @param met A `data.frame` of sample info., and row names are sample ids while the column names are observed variables.
+#' @param lon Column name of longitude in <met>. Default is `longitude`.
+#' @param lat Column name of latitude in <met>. Default is `latitude`.
 check_metdata = function(met, lon = "longitude", lat = "latitude"){
-    if (met %>% class != "data.frame") stop("The <met> should be a data.frame!")
+    if (met %>% class != "data.frame") stop("The <met> must be a `data.frame`!")
     if (!lon %in% colnames(met)) paste0("The `", lon, "` not in <met> table!") %>% stop()
     if (!lat %in% colnames(met)) paste0("The `", lat, "` not in <met> table!") %>% stop()
 }
@@ -77,7 +77,7 @@ check_metdata = function(met, lon = "longitude", lat = "latitude"){
 #' @description Check the class of microgeo dataset.
 #' @param dataset A microgeo dataset. It is expected to be a `MicrogeoDataset`.
 check_dataset = function(dataset){
-    msg <- "The <dataset> should be a `MicrogeoDataset`!"
+    msg <- "The <dataset> must be a `MicrogeoDataset`!"
     if (dataset %>% class %>% length != 2) msg %>% stop()
     if (class(dataset)[1] != "list" || class(dataset)[2] != "MicrogeoDataset") msg %>% stop()
 }
@@ -85,46 +85,52 @@ check_dataset = function(dataset){
 #' @description Check the class of ggplot2 map layer.
 #' @param map.layer A ggplot2 object. It is expected to be a `gg` class.
 check_ggplot2_object = function(map.layer){
-    msg <- "The <map.layer> should be a `ggplot2` object!"
+    msg <- "The <map.layer> must be a `ggplot2` object!"
     if (map.layer %>% class %>% length != 2) msg %>% stop()
-    if (class(map.layer)[1] != "gg" | class(map.layer)[2] != "ggplot") msg %>% stop()
+    if (class(map.layer)[1] != "gg" || class(map.layer)[2] != "ggplot") msg %>% stop()
 }
 
-#' @description Check whether the map is returned by `microgeo::read_aliyun_map()`
+#' @description Check whether the map object is returned by `microgeo::read_aliyun_map()`.
 #' @param map A geographic map with the class of `SpatialPolygonsDataFrame`.
+#' @return `TRUE` if the map object is returned by `microgeo::read_aliyun_map()`;
 check_aliyun_map = function(map){
-    if ('FMTS' %in% names(map@data) && map@data$FMTS %>% unique == 'microgeo' &&
-        map@data$TYPE %>% unique == 'DataV.GeoAtlas') {
-        stop('Can not accept a `SpatialPolygonsDataFrame` returned by `read_aliyun_map()`!')
+    is.aliyun.map <- FALSE
+    if ('FMTS' %in% names(map@data) && unique(map@data$FMTS) == 'microgeo' &&
+        unique(map@data$TYPE) == 'DataV.GeoAtlas'){
+        is.aliyun.map <- TRUE
     }
+    return (is.aliyun.map)
 }
 
 #' @description Check whether a variable exists in the `SpatialPolygonsDataFrame`.
-#' @param map A geographic map with the class of `SpatialPolygonsDataFrame`.
+#' @param map A geographic map object with the class of `SpatialPolygonsDataFrame`.
 #' @param var A variable name to be checked.
 check_map_var = function(map, var){
-    msg <- '` not in <map>! Use `head(<replace with your mapObject>@data)` to check avaliable variables!'
+    msg <- '` not in <map>! Use `head(<your map object>@data)` to check the avaliable variables!'
     if (!var %in% names(map@data)) paste0('The `', var, msg) %>% stop()
 }
 
 #' @description Check whether the ggplot2 theme is valid.
-#' @param gg.theme A ggplot2 theme like `theme_bw()`
+#' @param gg.theme A ggplot2 theme like `theme_bw()`.
 check_ggplot2_theme = function(gg.theme) {
     if (!gg.theme %>% ggplot2::is.theme()) "Invalid ggplot2 theme!" %>% stop()
 }
 
 #' @description Get the position of legend for ggplot2 visualization.
-#' @param legend.position A character or numeric vector indicating the potential position of legend.
+#' @param legend.position A character or numeric vector indicating the position of legend.
+#' @return The position of ggplot2 legend.
 get_legend_position = function(legend.position){
-    if (legend.position %>% length > 1 && !legend.position %>% is.numeric) legend.position <- legend.position[1]
+    # legend position: c(0.2, 0.3) or c("right", "left", "top", "bottom")
+    if (legend.position %>% length > 1 && !legend.position %>% is.numeric)
+        legend.position <- legend.position[1]
     return(legend.position)
 }
 
-#' @description Add a rectangle for the legend.
+#' @description Add a rectangle for ggplot2 legend.
 #' @param p.map A ggplot2 object with the class of `gg`.
 add_legend_rect = function(p.map){
-    p.map <- p.map +
-        theme(legend.background = element_rect(fill = NA, size = 0.2, linetype = "solid", colour = "gray30"))
+    legend.background.obj <- element_rect(fill = NA, size = 0.2, linetype = "solid", colour = "gray30")
+    p.map <- p.map + theme(legend.background = legend.background.obj)
     return(p.map)
 }
 
@@ -135,30 +141,30 @@ add_legend_rect = function(p.map){
 #' @param lab.var Variable of labels to be checked.
 #' @param lab.var.must.be.num Should the <lab.var> be numeric? Default is `FALSE`.
 check_label_data = function(dat, lon.var, lat.var, lab.var, lab.var.must.be.num = FALSE){
-    if (dat %>% class != "data.frame") "The <dat> should be a dataframe!" %>% stop()
+    if (dat %>% class != "data.frame") "The <dat> must be a `data.frame`!" %>% stop()
     if (!lon.var %in% colnames(dat)) paste0("The `", lon.var, "` not in <dat>!") %>% stop()
     if (!lat.var %in% colnames(dat)) paste0("The `", lat.var, "` not in <dat>!") %>% stop()
     if (!lab.var %in% colnames(dat)) paste0("The `", lab.var, "` not in <dat>!") %>% stop()
-    if (lab.var.must.be.num & !dat[,lab.var] %>% is.numeric) 'The <lab.var> must be numeric!' %>% stop()
+    if (lab.var.must.be.num && !dat[,lab.var] %>% is.numeric) 'The <lab.var> must be numeric!' %>% stop()
 }
 
-#' @description Check the SpatRaster
-#' @param spat.raster A potential SpatRaster to be checked.
-#' @param arg.name Argument name in error message. Default is `NULL`.
+#' @description Check the `SpatRaster`.
+#' @param spat.raster A `SpatRaster` to be checked.
+#' @param arg.name Argument name in the error message. Default is `NULL`.
 check_spatraster = function(spat.raster, arg.name = NULL){
     arg.name <- ifelse(arg.name %>% is.null, "spat.raster", arg.name)
     if (spat.raster %>% class != "SpatRaster")
         paste0('The <', arg.name,'> must be a `SpatRaster`!') %>% stop()
 }
 
-#' @description Check the data to be merged with a map
+#' @description Check the data to be merged with a map object.
 #' @param dat A `data.frame` or `matrix` containing the variables to be merged with a map.
 #' @param met A `data.frame` of sample information. Row names should be sample ids and the column names must be variables
 #' (e.g., `longitude`, `latitude` and `group`). Longitude and latitude must be included in this `data.frame` as we mainly
 #' focus on the spatial patterns of microbial traits.
 #' @param map Geographic map with a class of `SpatialPolygonsDataFrame`.
 check_merging_data = function(dat, met, map){
-    met %>% check_metdata(lon = 'longitude', lat = 'latitude')
+    met %>% check_metdata(lon = 'longitude', lat = 'latitude') # 'longitude' and 'latitude' must be the colnames of <met>
     check.length <- unique(rownames(dat) == rownames(met)) %>% length
     check.logics <- !unique(rownames(dat) == rownames(met))
     if (check.length > 1 || check.logics) 'Sample ids in <dat> can not be matched to those in <met>!' %>% stop()
@@ -171,11 +177,11 @@ check_merging_data = function(dat, met, map){
     }
     map %>% check_mapdata()
     if (!'NAME' %in% names(map@data)) "Invalid `SpatialPolygonsDataFrame`!" %>% stop()
-    if (map@polygons %>% length != map@data %>% nrow) "Data in map can not be matched to the polygons!" %>% stop()
+    if (map@polygons %>% length != map@data %>% nrow) "Invalid `SpatialPolygonsDataFrame`!" %>% stop()
 }
 
 #' @description Sort samples to ensure the order is same as that in metadata table.
-#' @param dat A `data.frame` need to be applied for sample sorting.
+#' @param dat A `data.frame` to be applied for sorting.
 #' @param met A `data.frame` of metadata serving as a reference.
 #' @param is.matrix Is the <dat> a matrix? Default is `FALSE`.
 #' @return A `data.frame` (<is.matrix> is `FALSE`) or `matrix` (<is.matrix> is `TRUE`).
@@ -183,28 +189,24 @@ sort_samples = function(dat, met, is.matrix = FALSE){
 
     # if the <dat> is a data.frame with samples as the row names: is.matrix = FALSE
     if (!is.matrix){
-        idx <- sapply(rownames(met), function(x){which(rownames(dat) == x)})
+        idx <- sapply(met %>% rownames, function(x){ which(rownames(dat) == x) })
         colname <- colnames(dat); dat <- dat[idx,] %>% as.data.frame()
-        if (ncol(dat) == 1){
-            dat <- data.frame(row.names = rownames(met), val = dat); colnames(dat) <- colname
+        if (dat %>% ncol == 1){
+            dat <- data.frame(row.names = rownames(met), val = dat)
+            colnames(dat) <- colname
         }
-        if (length(unique(rownames(met) == rownames(dat))) > 1 ||
-            !unique(rownames(met) == rownames(dat))){
-            stop("Failed to sort samples, please check your data!")
-        }
+        if (length(unique(rownames(met) == rownames(dat))) > 1 || !unique(rownames(met) == rownames(dat)))
+            stop("Failed to sort sample ids, please check your data!")
 
     # if the <dat> is a matrix with samples as the row and column names: is.matrix = TRUE
     }else{
-        idx <- sapply(rownames(met), function(x){which(rownames(dat) == x)})
+        idx <- sapply(rownames(met), function(x){ which(rownames(dat) == x) })
         dat <- dat[idx, idx] %>% as.data.frame()
-        if (length(unique(rownames(met) == rownames(dat))) > 1 ||
-            !unique(rownames(met) == rownames(dat))){
+        if (length(unique(rownames(met) == rownames(dat))) > 1 || !unique(rownames(met) == rownames(dat)))
             stop("Failed to sort samples, please check your data!")
-        }
-        if (length(unique(rownames(met) == colnames(dat))) > 1 ||
-            !unique(rownames(met) == colnames(dat))){
+        if (length(unique(rownames(met) == colnames(dat))) > 1 || !unique(rownames(met) == colnames(dat)))
             stop("Failed to sort samples, please check your data!")
-        }
+        dat %<>% as.matrix()
     }
     return(dat)
 }
@@ -220,23 +222,19 @@ sort_samples = function(dat, met, is.matrix = FALSE){
 #' @return A `data.frame` with the `longitude`, `latitude` and `target` (<var>) as the column names.
 get_interpolation_data = function(dat, met, var, trim.dup = FALSE){
     met %>% check_metdata();
-    if (!var %in% colnames(dat))
-        paste0('Can not find `', var, '` in <dat>!') %>% stop()
-    check.length <- length(unique(rownames(met) == rownames(dat)))
+    if (!var %in% colnames(dat)) paste0('Can not find `', var, '` in <dat>!') %>% stop()
+    check.length <- unique(rownames(met) == rownames(dat)) %>% length
     check.logics <- !unique(rownames(met) == rownames(dat))
-    if (check.length > 1 | check.logics)
-        stop('Sample ids in <dat> can not be matched to those in <met>!')
-    use.dat <- data.frame(row.names = rownames(met),
-                          longitude = met$longitude,
-                          latitude = met$latitude, target = dat[,var])
-    if (use.dat[, c('longitude', 'latitude')] %>% unique() %>% nrow() < nrow(met)){
-        if (!trim.dup)
+    if (check.length > 1 || check.logics) stop('Sample ids in <dat> can not be matched to those in <met>!')
+    use.dat <- data.frame(row.names = rownames(met), longitude = met$longitude,
+                          latitude  = met$latitude, target = dat[,var])
+    if (use.dat[, c('longitude', 'latitude')] %>% unique() %>% nrow() < nrow(met)){ # there are duplicated coordinates
+        if (!trim.dup) # rise an error if trim.dup = FALSE
             stop('Duplicated coordinates were detected! you can use `trim.dup = TRUE` to ignore this error,
-                 but it would randomly remove some sampling sites!')
+                 but it would randomly remove several sampling sites!')
         use.dat.0 <- use.dat[,c('longitude', 'latitude')] %>% unique()
-        use.dat <- use.dat[rownames(use.dat.0),]
-        paste0('only use ', nrow(use.dat), ' out of ',
-               nrow(met),' sampling sites for interpolation!') %>% warning()
+        use.dat   <- use.dat[rownames(use.dat.0),]
+        paste0('only use ', nrow(use.dat), ' out of ', nrow(met),' sampling sites for interpolation!') %>% warning()
     }
     return(use.dat)
 }

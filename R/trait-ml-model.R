@@ -484,7 +484,7 @@ predict_ml_geomap = function(model.dat, spat.raster, ...){
     train.vars <- model.dat$train.dat[, which(colnames(model.dat$train.dat) != 'target')]
     check.length <- length(unique(colnames(train.vars) == names(spat.raster)))
     check.logics <- !unique(colnames(train.vars) == names(spat.raster))
-    if (check.length > 1 | check.logics)
+    if (check.length > 1 || check.logics)
         stop('Invalid `SpatRaster` for prediction!')
     if (model.dat$model.type == 'regression'){
         rp <- terra::predict(spat.raster, model, na.rm = TRUE, ...)

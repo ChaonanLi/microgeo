@@ -4,15 +4,14 @@
 # Full license is avaliable in the file LICENSE, distributed with this package.                                         #
 # -----------------------------------------------------------------------------------------------------------------------
 
-#' @description Merge SpatRaster with a microgeo dataset.
+#' @description Merge a `SpatRaster` with a microgeo dataset.
 #' @param dataset A microgeo dataset with the class of `MicrogeoDataset`.
 #' @param spat.rast A `SpatRaster` to be merged with microgeo dataset.
-#' @param type Which type of SpatRaster would be merged? Default is `his`. Also could be `cla`.
+#' @param type Which type of `SpatRaster` would be merged? Default is `his`. Also could be `cla`.
 #' @return A `MicrogeoDataset` class containing all avaliable data for microgeo R package.
 merge_spat_raster = function(dataset, spat.rast, type = "his"){
     dataset %>% check_dataset()
     spat.rast %>% check_spatraster(arg.name = "spat.rast")
-
     if (dataset$spa$rast[[type]] %>% is.null){
         dataset$spa$rast[[type]] <- spat.rast
     }else{
@@ -56,11 +55,11 @@ download_aridity_index = function(outpath){
 #' @param outpath Output directory path.
 #' @return A `SpatRaster` of elevation.
 download_elev = function(res, outpath){
-    res.part  <- ifelse(res == 0.5, '30s', paste0(res, 'm'))
+    res.part <- ifelse(res == 0.5, '30s', paste0(res, 'm'))
     elev.path <- paste0("wc2.1_", res.part) %>% file.path(outpath, .) %>% create_dir(dirpath = .)
     elev.tiff <- paste0("wc2.1_", res.part, '_elev.tif') %>% file.path(elev.path, .)
     if (elev.tiff %>% file.exists) terra::rast(elev.tiff) %>% return ()
-    zipfile     <- paste0("wc2.1_", res.part, '_elev.zip')
+    zipfile <- paste0("wc2.1_", res.part, '_elev.zip')
     downloadURL <- file.path("https://biogeo.ucdavis.edu/data/worldclim/v2.1/base", zipfile)
     downloadPAT <- file.path(elev.path, zipfile)
     if (!downloadPAT %>% file.exists) download.file(url = downloadURL, destfile = downloadPAT)
@@ -73,10 +72,10 @@ download_elev = function(res, outpath){
 #' @param outpath Output directory path.
 #' @return A `SpatRaster` of historical bioclimatic variables.
 download_his_bioc = function(res, outpath){
-    res.part    <- ifelse(res == 0.5, '30s', paste0(res, 'm'))
-    bioc.path   <- paste0("wc2.1_", res.part) %>% file.path(outpath, .) %>% create_dir(dirpath = .)
-    zipfile     <- paste0("wc2.1_", res.part, '_bio.zip')
-    zippath     <- file.path(bioc.path, zipfile)
+    res.part <- ifelse(res == 0.5, '30s', paste0(res, 'm'))
+    bioc.path <- paste0("wc2.1_", res.part) %>% file.path(outpath, .) %>% create_dir(dirpath = .)
+    zipfile <- paste0("wc2.1_", res.part, '_bio.zip')
+    zippath <- file.path(bioc.path, zipfile)
     downloadURL <- file.path("https://biogeo.ucdavis.edu/data/worldclim/v2.1/base", zipfile)
     if (!zippath %>% file.exists) download.file(url = downloadURL, destfile = zippath)
     unzip(zipfile = zippath, overwrite = T, exdir = bioc.path)

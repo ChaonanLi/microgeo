@@ -164,7 +164,9 @@ read_shp_map = function(shpfile, crs.string = "EPSG:4326", ...){
 #' head(map@data)
 #' @export
 trans_map_fmt = function(map, var){
-    map %>% check_aliyun_map(); map %>% check_map_var(., var)
+    is.aliyun.map <- map %>% check_aliyun_map()
+    if (is.aliyun.map) stop('Can not accept a `SpatialPolygonsDataFrame` returned by `read_aliyun_map()`!')
+    map %>% check_map_var(., var)
     centroids <- map %>% sp::coordinates()
     map@data <- lapply(X = map@data %>% nrow %>% seq, function(x){
         data.frame(TYPE  = 'Non.DataV.GeoAtlas', FMTS  = 'microgeo', NAME = map@data[,var][x],
