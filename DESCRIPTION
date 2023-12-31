@@ -46,4 +46,3 @@ Imports:
     mapedit (>= 0.6.0),
     maps (>= 3.4.1),
     ptw (>= 1.9.16)
-PostInstall: inst/scripts/postinstall.R
