@@ -39,5 +39,11 @@ Imports:
     doParallel (>= 1.0.17),
     multiROC (>= 1.1.1),
     httr (>= 1.4.7),
-    snow (>= 0.4.4)
+    snow (>= 0.4.4),
+    mapdata (>= 2.3.1),
+    bitops (>= 1.0.7),
+    devtools (>= 2.4.5),
+    mapedit (>= 0.6.0),
+    maps (>= 3.4.1),
+    ptw (>= 1.9.16)
     
