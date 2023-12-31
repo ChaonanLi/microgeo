@@ -14,7 +14,7 @@ LazyData: true
 Encoding: UTF-8
 NeedsCompilation: no
 RoxygenNote: 7.2.3
-Depends: R (>= 3.6.0)
+Depends: R (>= 4.1.0)
 Imports: 
     magrittr (>= 2.0.3),
     ggplot2 (>= 3.4.3)
