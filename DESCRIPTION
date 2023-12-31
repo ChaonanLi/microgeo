@@ -19,8 +19,6 @@ Imports:
     magrittr (>= 2.0.3),
     ggplot2 (>= 3.4.3)
 Suggests:
-    showtext (>= 0.9.6),
-    MODIS (>= 1.2.11),
     psych (>= 2.3.6),
     picante (>= 1.8.2),
     iCAMP (>= 1.5.12),
@@ -31,9 +29,7 @@ Suggests:
     geodata (>= 0.5.8),
     sf (>= 1.0.14),
     sp (>= 2.0.0),
-    rgdal (>= 1.6.7),
     raster (>= 3.6.23),
-    rgeos (>= 0.6.4),
     randomcoloR (>= 1.1.0.1),
     tidyterra (>= 0.4.0),
     ggspatial (>= 1.1.9),
