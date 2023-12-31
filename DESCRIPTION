@@ -45,4 +45,5 @@ Imports:
     devtools (>= 2.4.5),
     mapedit (>= 0.6.0),
     maps (>= 3.4.1),
-    ptw (>= 1.9.16)
+    ptw (>= 1.9.16),
+    lwgeom (>= 0.2.13)
