@@ -91,9 +91,12 @@ read_aliyun_map = function(adcode = c(540000, 630000, 510000), sub.area = FALSE,
 #' head(map@data)
 #' map %>% plot_bmap()
 #' @export
-read_gadm_map = function(iso, res = 1, level = 1, version = "latest", out.dir = "GADM", crs.string = "EPSG:4326", ...){
+read_gadm_map = function(iso, res = 1, level = 1, version = 3.6, out.dir = "GADM", crs.string = "EPSG:4326", ...){
     map <- geodata::gadm(country = iso, resolution = res, level = level, version = version, path = out.dir, ...) %>%
-        suppressWarnings() %>% sf::st_as_sf() %>% sf::as_Spatial()
+        suppressWarnings()
+    if (terra::crs(map) == '')
+        stop("The crs is not avaliable in downloaded SpatVector! Try to change version as 3.6.")
+    map <- map %>% sf::st_as_sf() %>% sf::as_Spatial()
     if (terra::crs(map %>% terra::vect(), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6] %>% is.na){
         sp::proj4string(map) <- crs.string %>% sp::CRS()
     }else{
