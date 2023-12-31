@@ -40,5 +40,4 @@ Imports:
     multiROC (>= 1.1.1),
     httr (>= 1.4.7),
     snow (>= 0.4.4)
-Suggests:
     
