@@ -46,4 +46,5 @@ Imports:
     mapedit (>= 0.6.0),
     maps (>= 3.4.1),
     ptw (>= 1.9.16),
-    lwgeom (>= 0.2.13)
+    lwgeom (>= 0.2.13),
+    randomForest (>=4.7.1.1)
