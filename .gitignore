@@ -6,6 +6,6 @@ microgeo.Rproj
 .Ruserdata
 .DS_Store
 dev
-test
 .ipynb_checkpoints
 *.ipynb
+push
