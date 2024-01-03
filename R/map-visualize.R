@@ -882,7 +882,7 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
                           proj=TRUE, describe=TRUE, parse=TRUE)[1, 6]
 
     # Plot map: if both the <color.var> and <shape.var> are NULL
-    if (color.var %>% is.null & shape.var %>% is.null){
+    if (color.var %>% is.null && shape.var %>% is.null){
         met.cor <- sf::st_as_sf(met, coords = c("longitude", "latitude"), crs = map.crs)
         if (shape.val[1] > 20){ # The shape code more than 20, we can use both color and fill
             p.map <- map.layer + geom_sf(data = met.cor, fill = fill.val[1], color = color.val[1], shape = shape.val[1],
@@ -894,10 +894,10 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
     }
 
     # Plot map: if the <color.var> is not NULL but the <shape.var> is NULL ==> only classifying sampling sites by color
-    if (!color.var %>% is.null & shape.var %>% is.null){
+    if (!color.var %>% is.null && shape.var %>% is.null){
         if (!color.var %in% colnames(met)) paste0("The `", color.var, "` do not exist in your met!") %>% stop()
         met$color.group <- met[,color.var]
-        if (!color.ord %>% is.null %>% any) met$color.group <- factor(met$color.group, levels = color.ord)
+        if (any(!is.null(color.ord))) met$color.group <- factor(met$color.group, levels = color.ord)
         met.cor <- sf::st_as_sf(met, coords = c("longitude", "latitude"), crs = map.crs)
         if (shape.val[1] > 20){ # The shape code more than 20 ==> use fill color to classify the sampling sites
             if (met$color.group %>% unique %>% length > fill.val %>% length){
@@ -926,10 +926,10 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
     }
 
     # Plot map: if the <color.var> is NULL but the <shape.var> is not NULL ==> only classifying sampling sites by shape
-    if (color.var %>% is.null & !shape.var %>% is.null){
+    if (color.var %>% is.null && !shape.var %>% is.null){
         if (!shape.var %in% colnames(met)) paste0("The `", shape.var, "` do not exist in your met!") %>% stop()
         met$shape.group <- met[,shape.var]
-        if (!shape.ord %>% is.null %>% any) met$shape.group <- factor(met$shape.group, levels = shape.ord)
+        if (any(!is.null(shape.ord))) met$shape.group <- factor(met$shape.group, levels = shape.ord)
         if (met$shape.group %>% unique %>% length > shape.val %>% length){
             paste0(shape.val %>% length, " shape values are required!") %>% stop()
         }
@@ -953,12 +953,12 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
     }
 
     # Plot map: if the <color.var> and <shape.var> are not NULL ==> classifying sampling sites by both color and shape
-    if (!color.var %>% is.null & !shape.var %>% is.null){
+    if (!is.null(color.var) && !is.null(shape.var)){
         if (!color.var %in% colnames(met)) paste0("The `", color.var, "` do not exist in your met!") %>% stop()
         if (!shape.var %in% colnames(met)) paste0("The `", shape.var, "` do not exist in your met!") %>% stop()
         met$color.group <- met[,color.var]; met$shape.group <- met[,shape.var]
-        if (!color.ord %>% is.null %>% any) met$color.group <- factor(met$color.group, levels = color.ord)
-        if (!shape.ord %>% is.null %>% any) met$shape.group <- factor(met$shape.group, levels = shape.ord)
+        if (any(!is.null(color.ord))) met$color.group <- factor(met$color.group, levels = color.ord)
+        if (any(!is.null(shape.ord))) met$shape.group <- factor(met$shape.group, levels = shape.ord)
         met.cor <- sf::st_as_sf(met, coords = c("longitude", "latitude"), crs = map.crs)
         if (TRUE %in% unique(shape.val < 21)){ # There are shape code less than 21, so we can not apply the fill color
             if (met$color.group %>% unique %>% length > color.val %>% length){
