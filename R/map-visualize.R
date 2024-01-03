@@ -533,19 +533,19 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
                           border.color = 'black', border.size = 1, legend.title = NULL, facet.col.nums = 1,
                           facet.title.size = 15, ...){
     map.layer %>% check_ggplot2_object(); spat.raster %>% check_spatraster()
-    if (!breaks %>% is.null & !labels %>% is.null){ # Check breaks and labels if both of them are not `NULL`
+    if (!breaks %>% is.null %>% any & !labels %>% is.null %>% any){ # Check breaks and labels if both of them are not `NULL`
         if (labels %>% length != breaks %>% length + 1) {
             paste0(breaks %>% length + 1, " labels are required!") %>% stop()
         }
     }
     if (colors %>% length == 1 && colors == 'auto') { # Automatically generate colors
-        if (terra::is.factor(spat.raster) || !breaks %>% is.null){
+        if (terra::is.factor(spat.raster) || !breaks %>% is.null %>% any){
             colors <- RColorBrewer::brewer.pal(11, "RdYlGn")[c(1,3,5,9,11)] %>% rev()
         }else{
             colors <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlGn"))(100) %>% rev()
         }
     }
-    if (!terra::is.factor(spat.raster) && breaks %>% is.null){
+    if (!terra::is.factor(spat.raster) && breaks %>% is.null %>% any){
         if (spat.raster %>% names %>% length == 1) {
             map.layer <- map.layer + tidyterra::geom_spatraster(data = spat.raster) %>% suppressMessages() +
                 scale_fill_gradientn(name = ifelse(legend.title %>% is.null, spat.raster %>% names, legend.title),
@@ -557,7 +557,7 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
                 facet_wrap(~lyr, ncol = facet.col.nums)
         }
     }else{
-        if (!breaks %>% is.null){
+        if (!breaks %>% is.null %>% any){
             label.vals <- ""
             for (i in spat.raster %>% names %>% length %>% seq){
                 dat.vals <- terra::values(spat.raster[[i]]) %>%
@@ -572,7 +572,7 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
             break.val <- label.vals[order(match(label.vals, labels))]
         }
         if (spat.raster %>% names %>% length == 1){
-            if ('break.val' %>% exists && !break.val %>% is.null){
+            if ('break.val' %>% exists && !break.val %>% is.null %>% any){
                 map.layer <- map.layer + tidyterra::geom_spatraster(data = spat.raster, ...) %>% suppressMessages() +
                     scale_fill_manual(name = ifelse(is.null(legend.title), names(spat.raster), legend.title),
                                       values = colors, na.value = "transparent", breaks = break.val)
@@ -582,7 +582,7 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
                                       values = colors, na.value = "transparent")
             }
         }else{
-            if ('break.val' %>% exists && !break.val %>% is.null){
+            if ('break.val' %>% exists && !break.val %>% is.null %>% any){
                 map.layer <- map.layer + tidyterra::geom_spatraster(data = spat.raster, ...) %>% suppressMessages() +
                     scale_fill_manual(name = ifelse(is.null(legend.title), names(spat.raster), legend.title),
                                       values = colors, na.value = "transparent", breaks = break.val) +
@@ -897,7 +897,7 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
     if (!color.var %>% is.null & shape.var %>% is.null){
         if (!color.var %in% colnames(met)) paste0("The `", color.var, "` do not exist in your met!") %>% stop()
         met$color.group <- met[,color.var]
-        if (!color.ord %>% is.null) met$color.group <- factor(met$color.group, levels = color.ord)
+        if (!color.ord %>% is.null %>% any) met$color.group <- factor(met$color.group, levels = color.ord)
         met.cor <- sf::st_as_sf(met, coords = c("longitude", "latitude"), crs = map.crs)
         if (shape.val[1] > 20){ # The shape code more than 20 ==> use fill color to classify the sampling sites
             if (met$color.group %>% unique %>% length > fill.val %>% length){
@@ -929,7 +929,7 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
     if (color.var %>% is.null & !shape.var %>% is.null){
         if (!shape.var %in% colnames(met)) paste0("The `", shape.var, "` do not exist in your met!") %>% stop()
         met$shape.group <- met[,shape.var]
-        if (!shape.ord %>% is.null) met$shape.group <- factor(met$shape.group, levels = shape.ord)
+        if (!shape.ord %>% is.null %>% any) met$shape.group <- factor(met$shape.group, levels = shape.ord)
         if (met$shape.group %>% unique %>% length > shape.val %>% length){
             paste0(shape.val %>% length, " shape values are required!") %>% stop()
         }
@@ -957,8 +957,8 @@ add_sampl_site = function(map.layer, met, color.var = NULL, color.ord = NULL, sh
         if (!color.var %in% colnames(met)) paste0("The `", color.var, "` do not exist in your met!") %>% stop()
         if (!shape.var %in% colnames(met)) paste0("The `", shape.var, "` do not exist in your met!") %>% stop()
         met$color.group <- met[,color.var]; met$shape.group <- met[,shape.var]
-        if (!color.ord %>% is.null) met$color.group <- factor(met$color.group, levels = color.ord)
-        if (!shape.ord %>% is.null) met$shape.group <- factor(met$shape.group, levels = shape.ord)
+        if (!color.ord %>% is.null %>% any) met$color.group <- factor(met$color.group, levels = color.ord)
+        if (!shape.ord %>% is.null %>% any) met$shape.group <- factor(met$shape.group, levels = shape.ord)
         met.cor <- sf::st_as_sf(met, coords = c("longitude", "latitude"), crs = map.crs)
         if (TRUE %in% unique(shape.val < 21)){ # There are shape code less than 21, so we can not apply the fill color
             if (met$color.group %>% unique %>% length > color.val %>% length){
