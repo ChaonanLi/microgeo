@@ -1,14 +1,18 @@
-## microgeo: An R package for rapidly visualizing biogeographic traits of microbes on maps
+## microgeo: An R package rapidly visualizing the biogeographic traits of soil microbes onto maps
 
 Created by 
 
 * [Li, Chaonan (李超男)](https://www.researchgate.net/profile/Chaonan-Li-5) / licn@mtc.edu.cn / [Ecological Security and Protection Key Laboratory of Sichuan Province, Mianyang Normal University](https://zdsys.mtc.edu.cn/)
+
+* Li, Chi (刘驰) / liuchi0426@126.com /
+[College of Resources and Environment, Fujian Agriculture and Forestry University](https://zhxy.fafu.edu.cn/main.htm)
 
 * Liao, Haijun (廖海君) / liaohj@mtc.edu.cn /
 [Engineering Research Center of Chuanxibei RHS Construction at Mianyang Normal University of Sichuan Province](https://rhs.mtc.edu.cn/)
 
 Reviewed by [Li, Xiangzhen (李香真)](https://www.researchgate.net/profile/Xiangzhen-Li-2) / lixz@fafu.edu.cn /
 [College of Resources and Environment, Fujian Agriculture and Forestry University](https://zhxy.fafu.edu.cn/main.htm)
+
 
 ### 1. Introduction
 
@@ -24,16 +28,28 @@ The [microgeo](https://github.com/ChaonanLi/microgeo) is currently undergoing co
 
 ### 2. Installation and dependencies
 
-The [microgeo](https://github.com/ChaonanLi/microgeo) requires ![](https://img.shields.io/badge/R->=4.1.2-orange), ![](https://img.shields.io/badge/GDAL->=3.4.1-green) and following dependent R packages. For installing R and GDAL, you can refer to the methods described on their official websites. As for the dependent R packages, you can use `install.packages()` or `devtools::install_github()` to install them.
+The [microgeo](https://github.com/ChaonanLi/microgeo) requires ![](https://img.shields.io/badge/R->=4.1.0-orange), ![](https://img.shields.io/badge/GDAL-green) and following dependent R packages. For installing R and GDAL, you can refer to the methods described on their official websites.
 
-![](https://img.shields.io/badge/psych->=2.3.6-orange) ![](https://img.shields.io/badge/vegan->=2.6.4-brown) ![](https://img.shields.io/badge/picante->=1.8.2-lightblue) ![](https://img.shields.io/badge/GUniFrac->=1.7-red) ![](https://img.shields.io/badge/iCAMP->=1.5.12-brown) ![](https://img.shields.io/badge/showtext->=0.9.6-lightblue) ![](https://img.shields.io/badge/RColorBrewer->=1.1.3-orange) ![](https://img.shields.io/badge/terra->=1.7.46-orange) ![](https://img.shields.io/badge/geodata->=0.5.8-blue) ![](https://img.shields.io/badge/sf->=1.0.14-brown) ![](https://img.shields.io/badge/dplyr->=1.1.3-lightblue) ![](https://img.shields.io/badge/sp->=2.0.0-brown) ![](https://img.shields.io/badge/rgdal->=1.6.7-orange) ![](https://img.shields.io/badge/raster->=3.6.23-orange) ![](https://img.shields.io/badge/rgeos->=0.6.4-brown) ![](https://img.shields.io/badge/randomcoloR->=1.1.0.1-green) ![](https://img.shields.io/badge/tidyterra->=0.4.0-green) ![](https://img.shields.io/badge/ggspatial->=1.1.9-brown) ![](https://img.shields.io/badge/ggplot2->=3.4.3-green) ![](https://img.shields.io/badge/ggnewscale->=0.4.9-green) ![](https://img.shields.io/badge/ape->=5.7.1-red) ![](https://img.shields.io/badge/cli->=3.6.1-lightblue) ![](https://img.shields.io/badge/gstat->=2.1.1-red) ![](https://img.shields.io/badge/caret->=6.0.94-orange) ![](https://img.shields.io/badge/parallel->=4.1.2-lightblue) ![](https://img.shields.io/badge/doParallel->=1.0.17-brown) ![](https://img.shields.io/badge/multiROC->=1.1.1-darkgreen) ![](https://img.shields.io/badge/httr->=1.4.7-green) ![](https://img.shields.io/badge/utils->=4.1.2-lightblue) ![](https://img.shields.io/badge/MODIS->=1.2.11-darkgreen) ![](https://img.shields.io/badge/magrittr->=2.0.3-darkgreen) ![](https://img.shields.io/badge/snow->=0.4.4-lightblue)
-
-To install [microgeo](https://github.com/ChaonanLi/microgeo), just type following codes in your R console. The installation may take a few minutes due to the large size of packages and their dependencies. Due to network conditions, you may experience slow speeds when running `devtools::install_github("ChaonanLi/microgeo")`. Please be patient and wait for the process to complete.
+To install [microgeo](https://github.com/ChaonanLi/microgeo), just type following codes in your R console. The installation may take a few minutes due to the dependencies. Please be patient and wait for the process to complete.
 
 ```{.r}
-if (!require(devtools)) install.packages("devtools")
-if (!require(microgeo)) devtools::install_github("ChaonanLi/microgeo")
+if (!suppressMessages(require('remotes', character.only = TRUE))) 
+    install.packages('remotes', dependencies = TRUE, repos = "http://cran.rstudio.com/")
+if (!suppressMessages(require('microgeo', character.only = TRUE)))
+    # remotes::install_github('ChaonanLi/microgeo') 
+    remotes::install_git("https://gitee.com/bioape/microgeo") # Specifically for Mainland Chinese users; 
+source(system.file("scripts", "install-extra-pkgs.R", package = "microgeo")) # Install additional R packages required by `microgeo`
 ```
+
+For the convenience of users to quickly use the microgeo R package and to facilitate the deployment of the microgeo R package on servers, we have built a Docker image based on Ubuntu 22.04 and R 4.3.2. You can quickly set up a microgeo running environment by using the following commands:
+
+```{.shell}
+docker pull microgeo-jupyterlab:ubuntu-22.04-R4.3.2
+
+docker run -itd --rm -p 10000:8888 -v $PWD:$PWD --name microgeo-jupyterlab-ubuntu-22.04-R4.32 microgeo-jupyterlab:ubuntu-22.04-R4.3.2
+```
+
+Then, you can visit the http://[IP]:10000 or http://127.0.0.1:10000 in your browser to use microgeo R package.
 
 ### 3. Citation
 
@@ -41,6 +57,6 @@ If you use [microgeo](https://github.com/ChaonanLi/microgeo) for data processing
 
 ### 4. Usages and examples
 
-To make it more convenient for users to use [microgeo](https://github.com/ChaonanLi/microgeo), we not only provide detailed examples in the help document section of each function (which can be viewed by using `?<function_name()>`), but also provide a more detailed usage [tutorial](https://github.com/ChaonanLi/microgeo/tutorial.ipynb) by using JupyterLab Notebook. If the [microgeo](https://github.com/ChaonanLi/microgeo) package and its dependencies have been successfully installed, users can directly run these examples in this Notebook. If the JupyterLab is not avaliable on your PC or server, users also can copy the codes from the [HTML version of tutorial](https://github.com/ChaonanLi/microgeo/tutorial.html) to the R console to run the examples.
+To make it more convenient for users to use [microgeo](https://github.com/ChaonanLi/microgeo), we not only provide detailed examples in the help document section of each function (which can be viewed by using `?<function_name()>`), but also provide a more detailed usage [tutorial](https://github.com/ChaonanLi/microgeo/tutorial/*.ipynb) by using JupyterLab Notebook. If the [microgeo](https://github.com/ChaonanLi/microgeo) package and its dependencies have been successfully installed, users can directly run these examples in this Notebook. If the JupyterLab is not avaliable on your PC or server, users also can copy the codes from the [HTML version of tutorial](https://github.com/ChaonanLi/microgeo/tutorial/*.html) to the R console to run the examples.
 
 It is recommended to use [JupyterLab](https://jupyter.org/install) or [RStudio](https://posit.co/downloads/) as your IDE (Integrated Development Environment). However, if you prefer the black screen with white text, using R's command interface directly is also fine.
