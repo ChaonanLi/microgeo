@@ -533,19 +533,19 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
                           border.color = 'black', border.size = 1, legend.title = NULL, facet.col.nums = 1,
                           facet.title.size = 15, ...){
     map.layer %>% check_ggplot2_object(); spat.raster %>% check_spatraster()
-    if (!breaks %>% is.null %>% any & !labels %>% is.null %>% any){ # Check breaks and labels if both of them are not `NULL`
-        if (labels %>% length != breaks %>% length + 1) {
+    if (any(!is.null(breaks)) && any(!is.null(labels))){ # Check breaks and labels if both of them are not `NULL`
+        if (length(labels) != length(breaks) + 1) {
             paste0(breaks %>% length + 1, " labels are required!") %>% stop()
         }
     }
-    if (colors %>% length == 1 && colors == 'auto') { # Automatically generate colors
-        if (terra::is.factor(spat.raster) || !breaks %>% is.null %>% any){
+    if (length(colors) == 1 && colors == 'auto') { # Automatically generate colors
+        if (terra::is.factor(spat.raster) || any(!is.null(breaks))){
             colors <- RColorBrewer::brewer.pal(11, "RdYlGn")[c(1,3,5,9,11)] %>% rev()
         }else{
             colors <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlGn"))(100) %>% rev()
         }
     }
-    if (!terra::is.factor(spat.raster) && breaks %>% is.null %>% any){
+    if (!terra::is.factor(spat.raster) && any(is.null(breaks))){
         if (spat.raster %>% names %>% length == 1) {
             map.layer <- map.layer + tidyterra::geom_spatraster(data = spat.raster) %>% suppressMessages() +
                 scale_fill_gradientn(name = ifelse(legend.title %>% is.null, spat.raster %>% names, legend.title),
@@ -557,7 +557,7 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
                 facet_wrap(~lyr, ncol = facet.col.nums)
         }
     }else{
-        if (!breaks %>% is.null %>% any){
+        if (any(!is.null(breaks))){
             label.vals <- ""
             for (i in spat.raster %>% names %>% length %>% seq){
                 dat.vals <- terra::values(spat.raster[[i]]) %>%
@@ -582,7 +582,7 @@ add_spatraster = function(map.layer, spat.raster, colors = 'auto', breaks = NULL
                                       values = colors, na.value = "transparent")
             }
         }else{
-            if ('break.val' %>% exists && !break.val %>% is.null %>% any){
+            if ('break.val' %>% exists && any(!is.null(break.val))){
                 map.layer <- map.layer + tidyterra::geom_spatraster(data = spat.raster, ...) %>% suppressMessages() +
                     scale_fill_manual(name = ifelse(is.null(legend.title), names(spat.raster), legend.title),
                                       values = colors, na.value = "transparent", breaks = break.val) +
