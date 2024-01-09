@@ -107,13 +107,13 @@ read_gadm_map = function(iso, res = 1, level = 1, version = 3.6, out.dir = "GADM
 
 #' @title Read a geographic map from the ESRI Shapefile
 #' @author Li Chaonan (Ecological Security and Protection Key Laboratory of Sichuan Province, Mianyang Normal University)
-#' @description This function is used to read a geographic map from the ESRI Shapefile via using \code{rgdal::readOGR()}.
+#' @description This function is used to read a geographic map from the ESRI Shapefile via using \code{terra::vect()}.
 #' @param shpfile A file path of ESRI Shapefile.
 #' @param crs.string Coordinate Reference System (CRS). Default is `"EPSG:4326"`.
-#' @param ... Parameters parsed by \code{rgdal::readOGR()}.
+#' @param ... Parameters parsed by \code{terra::vect()}.
 #' @return A `SpatialPolygonsDataFrame`.
 #' @seealso
-#' \code{\link[rgdal:readOGR]{rgdal::readOGR()}}
+#' \code{\link[terra::vect]{terra::vect()}}
 #' \code{\link[microgeo:plot_bmap]{microgeo::plot_bmap()}}
 #' \code{\link[microgeo:trans_map_fmt]{microgeo::trans_map_fmt()}}
 #' @examples
@@ -132,7 +132,7 @@ read_gadm_map = function(iso, res = 1, level = 1, version = 3.6, out.dir = "GADM
 #' map %>% plot_bmap()
 #' @export
 read_shp_map = function(shpfile, crs.string = "EPSG:4326", ...){
-    map <- rgdal::readOGR(shpfile, verbose = FALSE, ...) %>% suppressWarnings()
+    map <- terra::vect(shpfile, ...) %>% sf::st_as_sf(y) %>% as(., "Spatial")
     if (terra::crs(map %>% terra::vect(), proj = TRUE, describe = TRUE, parse = TRUE)[1, 6] %>% is.na){
         sp::proj4string(map) <- crs.string %>% sp::CRS()
     }else{

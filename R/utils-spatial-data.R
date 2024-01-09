@@ -258,8 +258,7 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                 if (!file.exists(outfile.name)){
                     merg.list <- lapply(files, function(file){
                         sds.object <- MODIS::getSds(file); sds.names <- sds.object$SDSnames
-                        hdf.layer <- rgdal::readGDAL(sds.object$SDS4gdal[which(sds.names == dat.part$sds.name)],
-                                                     as.is = TRUE) %>% raster::raster()
+                        hdf.layer <- terra::rast(sds.object$SDS4gdal[which(sds.names == dat.part$sds.name)])
                         if (dat.part$scale.factor != "NA") hdf.layer <- hdf.layer * as.numeric(dat.part$scale.factor)
                         hdf.layer
                     })
