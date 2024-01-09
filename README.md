@@ -5,20 +5,20 @@ The [microgeo](https://github.com/ChaonanLi/microgeo) R package warps `ggplot2` 
 
 ![RTools](images/microgeo-workflow.png)
 
-The [microgeo](https://github.com/ChaonanLi/microgeo) R package requires `R >= 4.1.0` and several dependent R packages, and it is now available on both [GitHub](https://github.com/ChaonanLi/microgeo) and [Gitee](https://gitee.com/bioape/microgeo). The installation may take a few minutes because of the dependencies, especially the installation on an Ubuntu OS. Please be patient and wait for the installation process to complete. If the installation is interrupted, you may need to install several libraries. Please pay attention to the prompts during the installation process for guidance. 
+The [microgeo](https://github.com/ChaonanLi/microgeo) R package requires `R >= 4.1.0` and several dependent R packages, and it is now available on both [GitHub](https://github.com/ChaonanLi/microgeo) and [Gitee](https://gitee.com/bioape/microgeo). The installation may take a few minutes because the dependencies, especially the installation on an Ubuntu OS. Please be patient and wait for the installation process to complete. If the installation is interrupted, you may need to install several libraries. Please pay attention to the prompts during the installation process for guidance. 
 
 The [microgeo](https://github.com/ChaonanLi/microgeo) R package has been tested in the following environments:
 
-|CPU	            |Cores	                |Memory (GB) |Operate system|Architecture  |R version     |
-|-------------------|-----------------------|------------|--------------|--------------|--------------|
-|AMD 5700G          |8 cores 16 threads     |32	         |Windows 10    |x86           |4.3.2         |
-|AMD 5700G          |8 cores 16 threads     |32	         |Windows 11    |x86           |4.3.2         |
-|Intel Core i5-5350U|2 cores 4 threads      |8	         |macOS 12.7.2  |x86           |4.3.2         |
-|Apple M2 Pro       |10 cores 20 threads    |16          |macOS 14.0    |arm           |4.3.2         |
-|Apple M2           |8 cores 16 threads     |16	         |macOS 13.5.2  |arm           |4.3.2         |
-|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 18.04  |x86           |4.1.0 to 4.3.2|
-|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 20.04  |x86           |4.1.0 to 4.3.2|
-|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 22.04  |x86           |4.1.0 to 4.3.2|
+|CPU	            |Cores	                |Memory (GB) |Operate system|Architecture  |R version     |Status |
+|-------------------|-----------------------|------------|--------------|--------------|--------------|---------------------------------------------------------------------------------|
+|AMD 5700G          |8 cores 16 threads     |32	         |Windows 10    |x86           |4.3.2         |Very well!                                                                       |
+|AMD 5700G          |8 cores 16 threads     |32	         |Windows 11    |x86           |4.3.2         |Very well!                                                                       |
+|Intel Core i5-5350U|2 cores 4 threads      |8	         |macOS 12.7.2  |x86           |4.3.2         |Very well!                                                                       |
+|Apple M2 Pro       |10 cores 20 threads    |16          |macOS 14.0    |arm           |4.3.2         |The `get_modis_*_metrics()` runs very slowly because of the `terra::mosaic()`.   |
+|Apple M2           |8 cores 16 threads     |16	         |macOS 13.5.2  |arm           |4.3.2         |The `get_modis_*_metrics()` runs very slowly because of the `terra::mosaic()`.   |
+|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 18.04  |x86           |4.1.0 to 4.3.2|Very well!                                                                       |
+|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 20.04  |x86           |4.1.0 to 4.3.2|Very well!                                                                       |
+|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 22.04  |x86           |4.1.0 to 4.3.2|Very well!                                                                       |
 
 Before installing the [microgeo](https://github.com/ChaonanLi/microgeo) R package, there are a few additional steps to take. Here, we present the installation procedures on the three major operating systems.
 
@@ -44,12 +44,13 @@ Then, we need to install the `Homebrew` if it is not avaliable on your Mac. Just
 
 ```shell
 # Install `Homebrew`
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" # you may need to add `185.199.110.133 raw.githubusercontent.com` to `/etc/hosts`
 
 # Configure `Homebrew` if the `brew` command is not avaliable in your therminal
 # The path of `brew` may be not the `/opt/homebrew/bin` in your Mac! Run `dirname $(which brew)` to find the correct path 
 echo 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc # The default terminal is `zsh` rather than `bash` in the new version of Mac; Run `echo $SHELL` to check it
 echo 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.bash_profile # The default terminal is `bash` in the old version of Mac; Run `echo $SHELL` to check it
+source ~/.zshrc && source ~/.bash_profile
 
 # Check the version of `Homebrew`
 brew --version
@@ -78,10 +79,9 @@ Now, we can use `Homebrew` to install the system libraries required by [microgeo
 
 ```shell
 brew install geos
-brew install gdal
-brew install proj
-brew install pkg-config
 ```
+
+Please note that in MacOS, due to different system versions, additional system libraries may be required (such as `subversion`, `gdal`, `proj`, and `pkg-config`, etc.). Pay attention to the prompts during the installation process. If you encounter dependency installation failures due to missing library files, please use the `brew` command to install the required libraries before installing the dependencies of microgeo R package.
 
 ### 1.3 Install dependencies on Ubuntu OS (64 bit, x86)
 
@@ -119,7 +119,7 @@ if (!suppressMessages(require('microgeo', character.only = TRUE)))
     remotes::install_git("https://gitee.com/bioape/microgeo")
 ```
 
-Since several dependent R packages are not avaliable on `CRAN`, there are a few additional steps to use the [microgeo](https://github.com/ChaonanLi/microgeo) R package. Just run the following codes in your R console.
+Since several dependent R packages are not avaliable on `CRAN`, there are a few additional steps to use the [microgeo](https://github.com/ChaonanLi/microgeo) R package. Just run the following codes in your R console. Sometimes, when installing packages in RStudio, you may encounter situations where certain library files cannot be found. In such cases, you can simply switch to your terminal to perform the installation.
 
 
 ```R
