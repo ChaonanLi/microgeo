@@ -8,7 +8,7 @@ read_gadm_map(
   iso,
   res = 1,
   level = 1,
-  version = "latest",
+  version = 3.6,
   out.dir = "GADM",
   crs.string = "EPSG:4326",
   ...
