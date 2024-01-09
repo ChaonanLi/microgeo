@@ -5,9 +5,6 @@
 # -----------------------------------------------------------------------------------------------------------------------
 # Install several required R packages after the `microgeo` has been successfully installed
 # These packages are not avaliable at CRAN.
-if (!suppressMessages(require('rgdal', character.only = TRUE)))
-    install.packages(system.file("pkgs", "rgdal_1.6-7.tar.gz", package = "microgeo"),
-                     repos = NULL, type = "source", dependencies = TRUE)
 if (!suppressMessages(require('maptools', character.only = TRUE)))
     install.packages(system.file("pkgs", "maptools_1.1-8.tar.gz", package = "microgeo"),
                      repos = NULL, type = "source", dependencies = TRUE)
