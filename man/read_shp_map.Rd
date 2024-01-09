@@ -11,13 +11,13 @@ read_shp_map(shpfile, crs.string = "EPSG:4326", ...)
 
 \item{crs.string}{Coordinate Reference System (CRS). Default is `"EPSG:4326"`.}
 
-\item{...}{Parameters parsed by \code{rgdal::readOGR()}.}
+\item{...}{Parameters parsed by \code{terra::vect()}.}
 }
 \value{
 A `SpatialPolygonsDataFrame`.
 }
 \description{
-This function is used to read a geographic map from the ESRI Shapefile via using \code{rgdal::readOGR()}.
+This function is used to read a geographic map from the ESRI Shapefile via using \code{terra::vect()}.
 }
 \examples{
 ##### Example 1: subset the research areas from a ESRI Shapefile of China map #####
@@ -35,7 +35,7 @@ head(map@data)
 map \%>\% plot_bmap()
 }
 \seealso{
-\code{\link[rgdal:readOGR]{rgdal::readOGR()}}
+\code{\link[terra::vect]{terra::vect()}}
 \code{\link[microgeo:plot_bmap]{microgeo::plot_bmap()}}
 \code{\link[microgeo:trans_map_fmt]{microgeo::trans_map_fmt()}}
 }

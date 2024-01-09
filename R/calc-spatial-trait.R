@@ -509,6 +509,12 @@ get_modis_cla_metrics = function(dataset, username, password, measures = "LC_Typ
     merge.ptvs <- ptv_modis_products(prod.list = modis.prod$prod.list, hdfs.path = downs.path)
     modis.data <- meg_modis_products(prod.list = modis.prod$prod.list, ptvdata = merge.ptvs,
                                      hdfpath = downs.path, threads = nums.job, outpath = out.dir)
+
+
+
+
+
+
     modis.dbss <- col_modis_products(modis.data = modis.data, date.ran = date.ran, outpath = out.dir)
     for (mea in modis.dbss$measure){
         tif.path <- modis.dbss[which(modis.dbss$measure == mea),]$dbpath

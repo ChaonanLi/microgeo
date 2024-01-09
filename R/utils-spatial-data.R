@@ -252,8 +252,7 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                 files <- list.files(hdfpath.tmp, pattern = dat.part$pattern)
                 files <- file.path(hdfpath.tmp, files)
                 outfile.name <- file.path(tifpath, paste(dat.part$product, dat.part$time,
-                                                         dat.part$version, gsub(" ", "_", dat.part$sds.name),
-                                                         sep = '.'))
+                                                         dat.part$version, gsub(" ", "_", dat.part$sds.name), sep = '.'))
                 outfile.name <- paste0(outfile.name, ".tif")
                 if (!file.exists(outfile.name)){
                     merg.list <- lapply(files, function(file){
@@ -264,7 +263,7 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                     })
                     layer.text <- paste(paste0(rep("merg.list[[", length(merg.list)),
                                                seq(length(merg.list)), rep("]]", length(merg.list))), collapse = ", ")
-                    layer.cmds <- paste0("terra::merge(", layer.text, ", filename = '", outfile.name,
+                    layer.cmds <- paste0("terra::mosaic(", layer.text, ", filename = '", outfile.name,
                                          "', overwrite = TRUE)")
                     merged.layer <- parse(text = layer.cmds) %>% eval()
                 }
