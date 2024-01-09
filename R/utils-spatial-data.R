@@ -263,9 +263,13 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                     })
                     layer.text <- paste(paste0(rep("merg.list[[", length(merg.list)),
                                                seq(length(merg.list)), rep("]]", length(merg.list))), collapse = ", ")
-                    layer.cmds <- paste0("terra::mosaic(", layer.text, ", filename = '", outfile.name,
-                                         "', overwrite = TRUE)")
+                    layer.cmds <- paste0("terra::mosaic(", layer.text, ")")
                     merged.layer <- parse(text = layer.cmds) %>% eval()
+                    terra::writeRaster(x = merged.layer, filename = outfile.name, overwrite = TRUE)
+
+                    #layer.cmds <- paste0("terra::mosaic(", layer.text, ", filename = '", outfile.name,
+                    #                     "', overwrite = TRUE)")
+                    #merged.layer <- parse(text = layer.cmds) %>% eval()
                 }
                 res <- data.frame(measure.name = dat.part$measure, product.name = dat.part$product,
                                   time.name = dat.part$time,
