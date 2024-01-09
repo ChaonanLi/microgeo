@@ -1,11 +1,8 @@
 .Rbuildignore
 .RData
-microgeo.Rproj
 .Rhistory
 .Rproj.user
 .Ruserdata
 .DS_Store
-dev
-.ipynb_checkpoints
-*.ipynb
+microgeo.Rproj
 push
