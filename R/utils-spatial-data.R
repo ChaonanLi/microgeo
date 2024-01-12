@@ -288,22 +288,16 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
 #' @return A `data.frame` of remote-sensing image information.
 col_modis_products = function(modis.data, date.ran, outpath){
     show_comm_msg("collecting all merged image files...")
-    system_info <- Sys.info()
-    is_windows <- tolower(system_info["sysname"]) == "windows"
     savepath <- file.path(outpath, "modis_products", "avg") %>% create_dir()
     measure2veris <- paste(modis.data$measure.name, modis.data$veri.name, sep = '_') %>% unique()
     res <- lapply(X = seq(length(measure2veris)), function(x){
         measure2veri <- measure2veris[x]
         paste0('current measure (', x, '/', length(measure2veris), '): ', measure2veri) %>% show_comm_msg()
         str.part <- strsplit(measure2veri, "_", fixed = T) %>% unlist()
-        savefile <- file.path(savepath, paste0(measure2veri, "_", paste(date.ran, collapse = "_"), ".tif"))
+        savefile <- file.path(savepath, paste0(measure2veri, "_", paste(gsub("\\|", "_", date.ran), collapse = "_"), ".tif"))
         tmp.dfs  <- modis.data[which(modis.data$measure.name == paste(str.part[1:(length(str.part) - 1)],
             collapse = "_") & modis.data$veri.name == str.part[length(str.part)]),]
-        if (is_windows){
-            copy.res <- file.copy(from = normalizePath(tmp.dfs$tif.path), to = normalizePath(savefile), overwrite = T)
-        }else{
-            copy.res <- file.copy(from = tmp.dfs$tif.path, to = savefile, overwrite = T)
-        }
+        copy.res <- file.copy(from = tmp.dfs$tif.path, to = savefile, overwrite = T)
         if (!copy.res) stop("Failed to copy file!")
         unit  <-  tmp.dfs$unit.name %>% unique(); unit <- ifelse(unit == 'no unit', "", unit)
         title <- paste(tmp.dfs$product.name, gsub(" ", "_", tmp.dfs$band.name),
@@ -331,7 +325,7 @@ avg_modis_products = function(modis.data, date.ran, threads, outpath){
         paste0('current measure (', x, '/', length(measure2veris), '): ',
                measure2veri, "(", threads, " threads)") %>% show_comm_msg()
         str.part <- strsplit(measure2veri, "_", fixed = T) %>% unlist()
-        savefile <- file.path(savepath, paste0(measure2veri, "_", paste(date.ran, collapse = "_"), ".tif"))
+        savefile <- file.path(savepath, paste0(measure2veri, "_", paste(gsub("\\|", "_", date.ran), collapse = "_"), ".tif"))
         tmp.dfs  <- modis.data[which(modis.data$measure.name == paste(str.part[1:(length(str.part) - 1)],
             collapse = "_") & modis.data$veri.name == str.part[length(str.part)]),]
         if (!file.exists(savefile)) {
