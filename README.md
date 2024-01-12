@@ -1,4 +1,4 @@
-## microgeo: An R package rapidly visualizing the biogeographic traits of soil microbes onto maps
+## microgeo: An R package rapidly showing the biogeographic traits of soil microbial community on maps
 
 
 The [microgeo](https://github.com/ChaonanLi/microgeo) R package warps `ggplot2` and `ggspatial`, and other R packages involved in geographic information system (GIS) and machine learning such as `gstat`, `raster`, `terra`, `sf`, `sp` and `caret`. It permits the microbial biogeographical trait calculation, spatial data collection, and spatial interpolation, machine learning modeling/prediction and visualization for microbial biogeographical traits. Specifically, the [microgeo](https://github.com/ChaonanLi/microgeo) provides the flexible visualization methods for microbial traits onto maps, e.g., gridded-based visualization, spatial interpolation and machine learning, and it is not limited to those traits calculated by [microgeo](https://github.com/ChaonanLi/microgeo) package itself. Users can rapidly visualize any microbial traits calculated by other tools onto maps, and also can analyze microbiome dataset in conjunction with the data calculated by [microgeo](https://github.com/ChaonanLi/microgeo) R package. The [microgeo](https://github.com/ChaonanLi/microgeo) is currently undergoing continuous developments and updates. We welcome any ideas and suggestions. If you find any errors during use, please submit them to [GitHub Issues](https://github.com/ChaonanLi/microgeo/issues) or [Gitee Issues](https://gitee.com/bioape/microgeo/issues). 
@@ -9,16 +9,17 @@ The [microgeo](https://github.com/ChaonanLi/microgeo) R package requires `R >= 4
 
 The [microgeo](https://github.com/ChaonanLi/microgeo) R package has been tested in the following environments:
 
-|CPU	            |Cores	                |Memory (GB) |Operate system|Architecture  |R version     |Status |
-|-------------------|-----------------------|------------|--------------|--------------|--------------|---------------------------------------------------------------------------------|
-|AMD 5700G          |8 cores 16 threads     |32	         |Windows 10    |x86           |4.3.2         |Very well!                                                                       |
-|AMD 5700G          |8 cores 16 threads     |32	         |Windows 11    |x86           |4.3.2         |Very well!                                                                       |
-|Intel Core i5-5350U|2 cores 4 threads      |8	         |macOS 12.7.2  |x86           |4.3.2         |Very well!                                                                       |
-|Apple M2 Pro       |10 cores 20 threads    |16          |macOS 14.0    |arm           |4.3.2         |The `get_modis_*_metrics()` runs very slowly because of the `terra::mosaic()`.   |
-|Apple M2           |8 cores 16 threads     |16	         |macOS 13.5.2  |arm           |4.3.2         |The `get_modis_*_metrics()` runs very slowly because of the `terra::mosaic()`.   |
-|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 18.04  |x86           |4.1.0 to 4.3.2|Very well!                                                                       |
-|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 20.04  |x86           |4.1.0 to 4.3.2|Very well!                                                                       |
-|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 22.04  |x86           |4.1.0 to 4.3.2|Very well!                                                                       |
+|CPU	            |Cores	                |Memory (GB) |Operate system|Architecture  |R version |Status |
+|-------------------|-----------------------|------------|-----------------------------|----------|--------------|---------------------------------------------------------------------------------|
+|AMD EPYC 7Y43      |8 cores 16 threads     |16	         |Windows 10 (Virtual Machine) |x86       |4.3.2         |Well done!                                                                       |
+|AMD EPYC 7Y43      |8 cores 16 threads     |16	         |Windows 11 (Virtual Machine) |x86       |4.3.2         |Well done!                                                                       |
+|Intel Core i5-5350U|2 cores 4 threads      |8	         |macOS 12.7.2                 |x86       |4.3.2         |Well done!                                                                       |
+|Apple M2 Pro       |10 cores 20 threads    |16          |macOS 14.0                   |arm       |4.3.2         |The `get_modis_*_metrics()` runs very slowly because of the `terra::mosaic()`.   |
+|Apple M2           |8 cores 16 threads     |16	         |macOS 13.5.2                 |arm       |4.3.2         |The `get_modis_*_metrics()` runs very slowly because of the `terra::mosaic()`.   |
+|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 18.04                 |x86       |4.1.0 to 4.3.2|Well done!                                                                       |
+|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 20.04                 |x86       |4.1.0 to 4.3.2|Well done!                                                                       |
+|AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 22.04                 |x86       |4.1.0 to 4.3.2|Well done!                                                                       |
+
 
 Before installing the [microgeo](https://github.com/ChaonanLi/microgeo) R package, there are a few additional steps to take. Here, we present the installation procedures on the three major operating systems.
 

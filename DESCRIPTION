@@ -3,12 +3,12 @@ Type: Package
 Title: Microbial geographic data analysis
 Version: 0.1.1
 Authors@R: c(person("Chaonan", "Li", role = c("aut", "cre"), email = "licn@mtc.edu.cn"),
-             person("Chi", "Liu", role = c("aut", "cre"), email = "liuchi0426@126.com"),
+             person("Chi", "Liu", role = "ctb", email = "liuchi0426@126.com"),
              person("Haijun", "Liao", role = "ctb", email = "liaohj@mtc.edu.cn"),
              person("Xiangzhen", "Li", role = "ctb", email = "lixz@fafu.edu.cn"))
-Author: Chaonan Li [aut, cre], Chi Liu[aut, cre], Haijun Liao [ctb], Xiangzhen Li [ctb]
+Author: Chaonan Li [aut, cre], Chi Liu[ctb], Haijun Liao [ctb], Xiangzhen Li [ctb]
 Maintainer: Chaonan Li <licn@mtc.edu.cn>
-Description: An R package rapidly visualizing the biogeographic traits of soil microbes onto maps.
+Description: An R package rapidly showing the biogeographic traits of soil microbial community on maps.
 URL: https://github.com/ChaonanLi/microgeo
 License: BSD 3-Clause License
 LazyData: true
