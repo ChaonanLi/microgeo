@@ -178,7 +178,7 @@ que_modis_products = function(modis.prod){
 #' @return A directory path of downloaded MODIS products (HDF files).
 dow_modis_products = function(username, password, search.res, outpath){
     show_comm_msg("downloading all avaliable MODIS products[skip if the file exists]...")
-    hdfpath <- file.path(outpath, "modis_products/hdf") %>% create_dir()
+    hdfpath <- file.path(outpath, "modis_products", "hdf") %>% create_dir()
     res <- lapply(X = 1:nrow(search.res), function(x){
         info.part <- basename(search.res[x, 5]) %>% strsplit(., split = '.', fixed = TRUE) %>% unlist()
         tmp.path <- create_dir(dirpath = file.path(hdfpath, info.part[1]), recursive = T)
@@ -236,7 +236,7 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
         product.name <- product.names[i];
         hdfpath.tmp <- file.path(hdfpath, product.name); hdf.files <- list.files(hdfpath.tmp)
         ptvdata.tmp <- ptvdata[which(ptvdata$product == product.name),]
-        tifpath <- create_dir(file.path(outpath, "modis_products/tif", product.name), recursive = T)
+        tifpath <- create_dir(file.path(outpath, "modis_products", "tif", product.name), recursive = T)
         threads.use <- ifelse(threads > nrow(ptvdata.tmp), nrow(ptvdata.tmp), threads)
         paste0('current product (', i, '/', length(product.names), '): ',
                product.name, " (convert ", length(hdf.files), " hdf files into ", nrow(ptvdata.tmp),
@@ -324,7 +324,7 @@ col_modis_products = function(modis.data, date.ran, outpath){
 #' @return A `data.frame` of remote-sensing image information.
 avg_modis_products = function(modis.data, date.ran, threads, outpath){
     show_comm_msg("calculating average values based on date range...")
-    savepath <- file.path(outpath, "modis_products/avg") %>% create_dir()
+    savepath <- file.path(outpath, "modis_products", "avg") %>% create_dir()
     measure2veris <- paste(modis.data$measure.name, modis.data$veri.name, sep = '_') %>% unique()
     res <- lapply(X = seq(length(measure2veris)), function(x){
         measure2veri <- measure2veris[x]
