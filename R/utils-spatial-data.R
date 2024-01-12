@@ -291,7 +291,6 @@ col_modis_products = function(modis.data, date.ran, outpath){
     system_info <- Sys.info()
     is_windows <- tolower(system_info["sysname"]) == "windows"
     savepath <- file.path(outpath, "modis_products", "avg") %>% create_dir()
-    if (is_windows) savepath %<>% normalizePath()
     measure2veris <- paste(modis.data$measure.name, modis.data$veri.name, sep = '_') %>% unique()
     res <- lapply(X = seq(length(measure2veris)), function(x){
         measure2veri <- measure2veris[x]
@@ -301,7 +300,7 @@ col_modis_products = function(modis.data, date.ran, outpath){
         tmp.dfs  <- modis.data[which(modis.data$measure.name == paste(str.part[1:(length(str.part) - 1)],
             collapse = "_") & modis.data$veri.name == str.part[length(str.part)]),]
         if (is_windows){
-            copy.res <- file.copy(from = normalizePath(tmp.dfs$tif.path), to = savefile, overwrite = T)
+            copy.res <- file.copy(from = normalizePath(tmp.dfs$tif.path), to = normalizePath(savefile), overwrite = T)
         }else{
             copy.res <- file.copy(from = tmp.dfs$tif.path, to = savefile, overwrite = T)
         }
