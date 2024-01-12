@@ -13,35 +13,38 @@
 #' @param adcode Adcode of the map area(s). For example, the `650000` means Xinjiang, and the `c(540000, 630000, 510000)`
 #' represents Xizang, Qinghai, and Sichuan. You can visit the `http://datav.aliyun.com/portal/school/atlas/area_selector`
 #' to select one or mutiple adcodes for your interested areas. Default is `c(540000, 630000, 510000)`.
-#' @param sub.area Whether to include sub-layers? Default is `FALSE`.
 #' @param crs.string Coordinate Reference System (CRS). Default is `"EPSG:4326"`.
 #' @return A `SpatialPolygonsDataFrame`.
 #' @seealso \code{\link[microgeo:plot_bmap]{microgeo::plot_bmap()}}
 #' @examples
 #' ## Example 1: using one adcode
-#' map1 <- read_aliyun_map(adcode = 650000)
-#' map2 <- read_aliyun_map(adcode = 650000, sub.area = TRUE)
-#' head(map1@data)
-#' head(map2@data)
-#' map1 %>% plot_bmap()
-#' map2 %>% plot_bmap()
+#' map <- read_aliyun_map(adcode = 650000)
+#' head(map@data)
+#' map %>% plot_bmap()
 #'
 #' ## Example 1: using mutiple adcodes
-#' map1 <- read_aliyun_map(adcode = c(540000, 630000, 510000))
-#' map2 <- read_aliyun_map(adcode = c(540000, 630000, 510000), sub.area = TRUE)
-#' head(map1@data)
-#' head(map2@data)
-#' map1 %>% plot_bmap()
-#' map2 %>% plot_bmap()
+#' map <- read_aliyun_map(adcode = c(540000, 630000, 510000))
+#' head(map@data)
+#' map %>% plot_bmap()
 #' @export
-read_aliyun_map = function(adcode = c(540000, 630000, 510000), sub.area = FALSE, crs.string = "EPSG:4326"){
+read_aliyun_map = function(adcode = c(540000, 630000, 510000), crs.string = "EPSG:4326"){
     base.url <- "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code="
-    if (sub.area) adcode <- paste0(adcode, '_full')
     if (adcode %>% length == 1){
         map <- paste0(base.url, adcode) %>% sf::read_sf() %>% sf::as_Spatial()
+        if (length(sf::st_is_valid(sf::st_as_sf(map))) > 1 || !sf::st_is_valid(sf::st_as_sf(map))){
+            unio.sp <- rgeos::gUnaryUnion(map) %>% suppressWarnings() %>%
+                suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
+            map <- sp::SpatialPolygonsDataFrame(unio.sp, data = data.frame(map@data, row.names = rownames(map@data)))
+        }
     }else{
         map <- lapply(adcode, function(code){
-            paste0(base.url, code) %>% sf::read_sf() %>% dplyr::as_tibble()
+            map.tmp <- paste0(base.url, code) %>% sf::read_sf() %>% sf::as_Spatial()
+            if (length(sf::st_is_valid(sf::st_as_sf(map.tmp))) > 1 || !sf::st_is_valid(sf::st_as_sf(map.tmp))){
+                unio.sp <- rgeos::gUnaryUnion(map.tmp) %>% suppressWarnings() %>%
+                    suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
+                map.tmp <- sp::SpatialPolygonsDataFrame(unio.sp, data = data.frame(map.tmp@data, row.names = rownames(map.tmp@data)))
+            }
+            map.tmp <- map.tmp %>% sf::st_as_sf() %>% dplyr::as_tibble()
         }) %>% do.call('rbind', .) %>% sf::st_as_sf() %>% sf::as_Spatial()
     }
     map@data <- lapply(X = map@data %>% nrow %>% seq, function(x){

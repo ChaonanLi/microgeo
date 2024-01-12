@@ -4,18 +4,12 @@
 \alias{read_aliyun_map}
 \title{Read one or multiple areas of China map from the DataV.GeoAtlas (Aliyun, China)}
 \usage{
-read_aliyun_map(
-  adcode = c(540000, 630000, 510000),
-  sub.area = FALSE,
-  crs.string = "EPSG:4326"
-)
+read_aliyun_map(adcode = c(540000, 630000, 510000), crs.string = "EPSG:4326")
 }
 \arguments{
 \item{adcode}{Adcode of the map area(s). For example, the `650000` means Xinjiang, and the `c(540000, 630000, 510000)`
 represents Xizang, Qinghai, and Sichuan. You can visit the `http://datav.aliyun.com/portal/school/atlas/area_selector`
 to select one or mutiple adcodes for your interested areas. Default is `c(540000, 630000, 510000)`.}
-
-\item{sub.area}{Whether to include sub-layers? Default is `FALSE`.}
 
 \item{crs.string}{Coordinate Reference System (CRS). Default is `"EPSG:4326"`.}
 }
@@ -30,20 +24,14 @@ graphics in official publications if you are unsure whether your map dataset is 
 }
 \examples{
 ## Example 1: using one adcode
-map1 <- read_aliyun_map(adcode = 650000)
-map2 <- read_aliyun_map(adcode = 650000, sub.area = TRUE)
-head(map1@data)
-head(map2@data)
-map1 \%>\% plot_bmap()
-map2 \%>\% plot_bmap()
+map <- read_aliyun_map(adcode = 650000)
+head(map@data)
+map \%>\% plot_bmap()
 
 ## Example 1: using mutiple adcodes
-map1 <- read_aliyun_map(adcode = c(540000, 630000, 510000))
-map2 <- read_aliyun_map(adcode = c(540000, 630000, 510000), sub.area = TRUE)
-head(map1@data)
-head(map2@data)
-map1 \%>\% plot_bmap()
-map2 \%>\% plot_bmap()
+map <- read_aliyun_map(adcode = c(540000, 630000, 510000))
+head(map@data)
+map \%>\% plot_bmap()
 }
 \seealso{
 \code{\link[microgeo:plot_bmap]{microgeo::plot_bmap()}}
