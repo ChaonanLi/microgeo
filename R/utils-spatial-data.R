@@ -290,7 +290,7 @@ col_modis_products = function(modis.data, date.ran, outpath){
     show_comm_msg("collecting all merged image files...")
     system_info <- Sys.info()
     is_windows <- tolower(system_info["sysname"]) == "windows"
-    savepath <- file.path(outpath, "modis_products/avg") %>% create_dir()
+    savepath <- file.path(outpath, "modis_products", "avg") %>% create_dir()
     measure2veris <- paste(modis.data$measure.name, modis.data$veri.name, sep = '_') %>% unique()
     res <- lapply(X = seq(length(measure2veris)), function(x){
         measure2veri <- measure2veris[x]
