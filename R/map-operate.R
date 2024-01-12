@@ -31,6 +31,7 @@ read_aliyun_map = function(adcode = c(540000, 630000, 510000), crs.string = "EPS
     base.url <- "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code="
     if (adcode %>% length == 1){
         map <- paste0(base.url, adcode) %>% sf::read_sf() %>% sf::as_Spatial()
+        # address bugs in windows
         if (length(sf::st_is_valid(sf::st_as_sf(map))) > 1 || !sf::st_is_valid(sf::st_as_sf(map))){
             unio.sp <- rgeos::gUnaryUnion(map) %>% suppressWarnings() %>%
                 suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
@@ -39,6 +40,7 @@ read_aliyun_map = function(adcode = c(540000, 630000, 510000), crs.string = "EPS
     }else{
         map <- lapply(adcode, function(code){
             map.tmp <- paste0(base.url, code) %>% sf::read_sf() %>% sf::as_Spatial()
+            # address bugs in windows
             if (length(sf::st_is_valid(sf::st_as_sf(map.tmp))) > 1 || !sf::st_is_valid(sf::st_as_sf(map.tmp))){
                 unio.sp <- rgeos::gUnaryUnion(map.tmp) %>% suppressWarnings() %>%
                     suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
