@@ -26,7 +26,7 @@ A `MicrogeoDataset` class with the following components:
 }
 \description{
 This function is designed to download aridity index (AI) from the global aridity index database (figshare:
-`10.6084/m9.figshare.7504448.v3`). Resolution is `30'`.
+`https://doi.org/10.6084/m9.figshare.7504448.v6`). Resolution is `30'`.
 }
 \examples{
 # Create a microgeo dataset

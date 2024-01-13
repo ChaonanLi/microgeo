@@ -7,7 +7,7 @@
 #' @title Download aridity index from figshare
 #' @author Li Chaonan (Ecological Security and Protection Key Laboratory of Sichuan Province, Mianyang Normal University)
 #' @description This function is designed to download aridity index (AI) from the global aridity index database (figshare:
-#' `10.6084/m9.figshare.7504448.v3`). Resolution is `30'`.
+#' `https://doi.org/10.6084/m9.figshare.7504448.v6`). Resolution is `30'`.
 #' @param dataset A microgeo dataset with the class of `MicrogeoDataset`.
 #' @param out.dir Directory path to save downloaded files. Default is `microgeo_data`
 #' @return A `MicrogeoDataset` class with the following components:
@@ -111,7 +111,7 @@ get_ai = function(dataset, out.dir = "microgeo_data"){
 #' dataset.dts %>% show_dataset()
 #'
 #' # Download elevation for the research region
-#' dataset.dts %<>% get_elev(res = 2.5, out.dir = "test/microgeo_data")
+#' dataset.dts %<>% get_elev(res = 10, out.dir = "test/microgeo_data")
 #' dataset.dts %>% show_dataset()
 #'
 #' # Visualize the elevation
@@ -179,7 +179,7 @@ get_elev = function(dataset, res = c(10, 5, 2.5, 0.5), out.dir = "microgeo_data"
 #' dataset.dts %>% show_dataset()
 #'
 #' # Download 19 historical bioclimatic variables for the research region
-#' dataset.dts %<>% get_his_bioc(res = 2.5, out.dir = "test/microgeo_data")
+#' dataset.dts %<>% get_his_bioc(res = 10, out.dir = "test/microgeo_data")
 #' dataset.dts %>% show_dataset()
 #'
 #' # Visualize the Bio12 (Mean annual precipitation). Just an example.

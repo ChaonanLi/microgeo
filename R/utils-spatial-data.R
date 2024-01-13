@@ -38,15 +38,13 @@ merge_spat_raster = function(dataset, spat.rast, type = "his"){
 #' @param outpath Output directory path.
 #' @return A `SpatRaster` of aridity index.
 download_aridity_index = function(outpath){
-    ai.tiff <- outpath %>% file.path(., "ai_et0.tif")
+    ai.tiff <- outpath %>% file.path(., "ai_v3_yr.tif")
     if (ai.tiff %>% file.exists) terra::rast(ai.tiff) %>% return ()
-    downloadURL <- "https://figshare.com/ndownloader/files/14118800"
-    downloadPAT <- outpath %>% file.path(., "global-ai_et0.zip")
-    if (!downloadPAT %>% file.exists) download.file(url = downloadURL, destfile = downloadPAT)
-    unziped.dirpath <- outpath %>% file.path(., "global-ai_et0")
-    unzip(zipfile = downloadPAT, overwrite = T, exdir = unziped.dirpath)
-    copy.status <- file.copy(from = unziped.dirpath %>% file.path(., 'ai_et0/ai_et0.tif'), to = ai.tiff, overwrite = T)
-    unlink(unziped.dirpath, recursive = T)
+    # https://figshare.com/ndownloader/files/34377245
+    downloadURL <- "https://github.com/ChaonanLi/global-aridity-index-data/releases/download/m9.figshare.7504448.v6/ai_v3_yr.tif.zip"
+    downloadPAT <- outpath %>% file.path(., "ai_v3_yr.tif.zip")
+    if (!downloadPAT %>% file.exists) download_remote_file(url = downloadURL, destfile = downloadPAT, show.size = FALSE)
+    unzip(zipfile = downloadPAT, overwrite = T, exdir = outpath)
     terra::rast(ai.tiff) %>% return()
 }
 
@@ -62,7 +60,7 @@ download_elev = function(res, outpath){
     zipfile <- paste0("wc2.1_", res.part, '_elev.zip')
     downloadURL <- file.path("https://biogeo.ucdavis.edu/data/worldclim/v2.1/base", zipfile)
     downloadPAT <- file.path(elev.path, zipfile)
-    if (!downloadPAT %>% file.exists) download.file(url = downloadURL, destfile = downloadPAT)
+    if (!downloadPAT %>% file.exists) download_remote_file(url = downloadURL, destfile = downloadPAT)
     unzip(zipfile = downloadPAT, overwrite = T, exdir = elev.path)
     terra::rast(elev.tiff) %>% return()
 }
@@ -77,7 +75,7 @@ download_his_bioc = function(res, outpath){
     zipfile <- paste0("wc2.1_", res.part, '_bio.zip')
     zippath <- file.path(bioc.path, zipfile)
     downloadURL <- file.path("https://biogeo.ucdavis.edu/data/worldclim/v2.1/base", zipfile)
-    if (!zippath %>% file.exists) download.file(url = downloadURL, destfile = zippath)
+    if (!zippath %>% file.exists) download_remote_file(url = downloadURL, destfile = zippath)
     unzip(zipfile = zippath, overwrite = T, exdir = bioc.path)
     file.list <- paste0("wc2.1_", res.part, '_bio_') %>% paste0(., seq(19), '.tif') %>% file.path(bioc.path, .)
     terra::rast(file.list) %>% return()
@@ -96,7 +94,7 @@ download_fut_bioc = function(arg, res, outpath){
     tifpath   <- file.path(bioc.path, tiffile)
     downloadURL <- paste0("https://geodata.ucdavis.edu/cmip6/",
                           res.part, '/', dat.part[1], '/', dat.part[2], '/', tiffile)
-    if (!tifpath %>% file.exists) download.file(url = downloadURL, destfile = tifpath)
+    if (!tifpath %>% file.exists) download_remote_file(url = downloadURL, destfile = tifpath)
     terra::rast(tifpath) %>% return()
 }
 

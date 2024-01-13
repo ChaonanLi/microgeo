@@ -238,3 +238,45 @@ get_interpolation_data = function(dat, met, var, trim.dup = FALSE){
     }
     return(use.dat)
 }
+
+#' @description Format file size
+#' @param size_in_bytes File size in bytes
+#' @return A formatted file size with correct unit
+format_file_size = function(size_in_bytes) {
+    units <- c("B", "KB", "MB", "GB", "TB")
+    unit_index <- max(0, floor(log(size_in_bytes, base = 1024)))
+    size_in_unit <- size_in_bytes / (1024 ^ unit_index)
+    formatted_size <- sprintf("%.2f %s", size_in_unit, units[unit_index + 1])
+    return(formatted_size)
+}
+
+#' @description Download file from public database
+#' @param url A remote file URL.
+#' @param destfile A local file path.
+#' @param show.size Show downloading size? Default is `TRUE`.
+download_remote_file = function(url, destfile, show.size = TRUE){
+    if (show.size){
+        head_response <- httr::HEAD(url)
+        if (head_response$status_code == 200 && "content-length" %in% names(httr::headers(head_response))){
+            size_in_bytes <- as.numeric(httr::headers(head_response)$`content-length`)
+            formatted_size <- format_file_size(size_in_bytes)
+            paste0("Trying URL (", formatted_size, "): ", url) %>% show_comm_msg()
+        }else{
+            paste0("Trying URL: ", url) %>% show_comm_msg()
+        }
+    }else{
+        paste0("Trying URL: ", url) %>% show_comm_msg()
+    }
+    response <- tryCatch({
+        httr::GET(url, httr::progress(),
+                  httr::progress(),
+                  httr::write_disk(destfile, overwrite = TRUE),
+                  httr::timeout(600))
+    }, error = function(e){
+        paste0("Failed to download file: `", url,
+               "`. Please manually download this file through using a browser, and copy it to ", dirname(destfile)) %>% stop()
+    })
+    if (response$status_code != 200)
+        paste0("Failed to download file: `", url,
+               "`. Please manually download this file through using a browser, and copy it to ", dirname(destfile)) %>% stop()
+}

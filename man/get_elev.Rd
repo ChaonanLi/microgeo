@@ -40,7 +40,7 @@ dataset.dts <- create_dataset(mat = qtp$asv, ant = qtp$tax, met = qtp$met, map =
 dataset.dts \%>\% show_dataset()
 
 # Download elevation for the research region
-dataset.dts \%<>\% get_elev(res = 2.5, out.dir = "test/microgeo_data")
+dataset.dts \%<>\% get_elev(res = 10, out.dir = "test/microgeo_data")
 dataset.dts \%>\% show_dataset()
 
 # Visualize the elevation

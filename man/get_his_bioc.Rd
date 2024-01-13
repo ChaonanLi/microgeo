@@ -40,7 +40,7 @@ dataset.dts <- create_dataset(mat = qtp$asv, ant = qtp$tax, met = qtp$met, map =
 dataset.dts \%>\% show_dataset()
 
 # Download 19 historical bioclimatic variables for the research region
-dataset.dts \%<>\% get_his_bioc(res = 2.5, out.dir = "test/microgeo_data")
+dataset.dts \%<>\% get_his_bioc(res = 10, out.dir = "test/microgeo_data")
 dataset.dts \%>\% show_dataset()
 
 # Visualize the Bio12 (Mean annual precipitation). Just an example.
