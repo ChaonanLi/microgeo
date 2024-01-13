@@ -15,7 +15,7 @@ calc_markers(
   r.thres = 0.1,
   p.thres = 0.05,
   mantel.permutations = 999,
-  mantel.parallel = 20
+  mantel.parallel = 2
 )
 }
 \arguments{
@@ -44,7 +44,7 @@ calculated by using \code{vegan::mantel()}.}
 
 \item{mantel.permutations}{Permutations for mantel test if there are mutiple variables (<use.var>). Default is `999`.}
 
-\item{mantel.parallel}{Parallel number for mantel test if there are mutiple variables (<use.var>). Default is `20`.}
+\item{mantel.parallel}{Parallel number for mantel test if there are mutiple variables (<use.var>). Default is `2`.}
 }
 \value{
 A `MicrogeoDataset` class with the following components:

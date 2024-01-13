@@ -10,7 +10,7 @@ get_modis_cla_metrics(
   password,
   measures = "LC_Type1",
   year = "least",
-  nums.job = 30,
+  nums.job = 2,
   out.dir = "microgeo_data"
 )
 }
@@ -28,7 +28,7 @@ all avaliable  measures. More details are avaliable at \href{https://lpdaac.usgs
 \item{year}{Download data for which year? If it is `least`, we will search data by using value obtained by subtracting
 two years from the current year. Default is `least`.}
 
-\item{nums.job}{How many threads would be used for the remote-sense image merging? Default is `30`. This would consume
+\item{nums.job}{How many threads would be used for the remote-sense image merging? Default is `2`. This would consume
 a large amounts of computational resources!}
 
 \item{out.dir}{Directory path to save downloaded files. Default is `microgeo_data`}

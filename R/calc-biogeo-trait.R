@@ -86,7 +86,7 @@ calc_rel_abund = function(dataset, use.perct = TRUE){
 #' @param r.thres Threshold of correlation coefficient to identify markers. Default is `0.1`.
 #' @param p.thres Threshold of P value to identify markers. Default is `0.05`.
 #' @param mantel.permutations Permutations for mantel test if there are mutiple variables (<use.var>). Default is `999`.
-#' @param mantel.parallel Parallel number for mantel test if there are mutiple variables (<use.var>). Default is `20`.
+#' @param mantel.parallel Parallel number for mantel test if there are mutiple variables (<use.var>). Default is `2`.
 #' @return A `MicrogeoDataset` class with the following components:
 #' \describe{
 #'   \item{\code{object$mat}}{A `data.frame` of ASV/gene abundance.}
@@ -155,7 +155,7 @@ calc_markers = function(dataset, use.var, use.dat = c('env', 'spa'), annotation.
                         dist.method = 'bray', p.adjust.method = 'none',
                         r.thres = 0.1, p.thres = 0.05,
                         mantel.permutations = 999,
-                        mantel.parallel = 20){
+                        mantel.parallel = 2){
 
     # check dataset and arguments
     dataset %>% check_dataset()
@@ -434,8 +434,8 @@ calc_beta_div = function(dataset, measures = c('bray', 'jaccard', 'euclidean', '
 #' betaNTI). Default is `alpha.phylo`.
 #' @param model Null model used to calculate `alpha.phylo` indices. Default is `taxa.labels`.
 #' @param runs How many runs would be used for calculation? Defaults is `999`.
-#' @param nworker How many threads would be used for calculation? Defaults is `20`.
-#' @param memory.G How many memory would be used for calculation? Defaults is `100` (GB).
+#' @param nworker How many threads would be used for calculation? Defaults is `2`.
+#' @param memory.G How many memory would be used for calculation? Defaults is `10` (GB).
 #' @param sig.bNTI Cutoffs for betaNTI. Required if the <type> is `beta.phylo`. Default is `2`.
 #' @param sig.rc Cutoffs for RC. Required if the <type> is `beta.phylo`. Default is `0.95`.
 #' @param abundance.weighted Use abundance weighted? Defaults is `TRUE`.
@@ -491,7 +491,7 @@ calc_beta_div = function(dataset, measures = c('bray', 'jaccard', 'euclidean', '
 calc_phylo_asmb = function(
     dataset, type = c('alpha.phylo', 'beta.phylo'),
     model = c('taxa.labels', 'richness', 'frequency', 'sample.pool', 'phylogeny.pool', 'independentswap', 'trialswap'),
-    runs = 999, nworker = 20, memory.G = 100, sig.bNTI = 2, sig.rc = 0.95, abundance.weighted = TRUE,
+    runs = 999, nworker = 2, memory.G = 10, sig.bNTI = 2, sig.rc = 0.95, abundance.weighted = TRUE,
     out.dir = 'calc_comm_asmb.rst'){
 
     # check dataset and arguments

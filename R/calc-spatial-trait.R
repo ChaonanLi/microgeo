@@ -343,7 +343,7 @@ get_fut_bioc = function(dataset, gcm = c("BCC-CSM2-MR", "ACCESS-CM2", "CNRM-CM6-
 #' when the measures are `NDVI` and/or `ENV`. Other MODIS image product harbor a fixed resolution. Default is `1000` m.
 #' @param prod.typ Type of MODIS image product. Select one from `"Terra", "Aqua"`. Default is `Terra`.
 #' @param date.ran Which date range would be applied? Default is `c("2019-08-01|2019-09-01", "2020-08-01|2020-09-01")`.
-#' @param nums.job How many threads would be used for the remote-sense image merging? Default is `30`. This would consume
+#' @param nums.job How many threads would be used for the remote-sense image merging? Default is `2`. This would consume
 #' a large amounts of computational resources!
 #' @param out.dir Directory path to save downloaded files. Default is `microgeo_data`
 #' @return A `MicrogeoDataset` class with the following components:
@@ -399,7 +399,7 @@ get_fut_bioc = function(dataset, gcm = c("BCC-CSM2-MR", "ACCESS-CM2", "CNRM-CM6-
 get_modis_num_metrics = function(dataset, username, password, measures = c("NDVI", "EVI"),
                                  prod.res = c(1000, 500, 250), prod.typ = c("Terra", "Aqua"),
                                  date.ran = c("2019-08-01|2019-09-01", "2020-08-01|2020-09-01"),
-                                 nums.job = 30, out.dir = "microgeo_data"){
+                                 nums.job = 2, out.dir = "microgeo_data"){
     check_dataset(dataset)
     if (username %>% is.null) stop("The <username> of EOSDIS is required!")
     if (password %>% is.null) stop("The <password> of EOSDIS is required!")
@@ -444,7 +444,7 @@ get_modis_num_metrics = function(dataset, username, password, measures = c("NDVI
 #' \href{https://lpdaac.usgs.gov/documents/1409/MCD12_User_Guide_V61.pdf}{MCD12_User_Guide_V61}. Default is `"LC_Type1"`.
 #' @param year Download data for which year? If it is `least`, we will search data by using value obtained by subtracting
 #' two years from the current year. Default is `least`.
-#' @param nums.job How many threads would be used for the remote-sense image merging? Default is `30`. This would consume
+#' @param nums.job How many threads would be used for the remote-sense image merging? Default is `2`. This would consume
 #' a large amounts of computational resources!
 #' @param out.dir Directory path to save downloaded files. Default is `microgeo_data`
 #' @return A `MicrogeoDataset` class with the following components:
@@ -490,7 +490,7 @@ get_modis_num_metrics = function(dataset, username, password, measures = c("NDVI
 #'    add_north_arrow() %>% add_scale_bar()
 #' @export
 get_modis_cla_metrics = function(dataset, username, password, measures = "LC_Type1", year = "least",
-                                 nums.job = 30, out.dir = "microgeo_data"){
+                                 nums.job = 2, out.dir = "microgeo_data"){
     check_dataset(dataset)
     if (username %>% is.null) stop("The <username> of EOSDIS is required!")
     if (password %>% is.null) stop("The <password> of EOSDIS is required!")
@@ -701,17 +701,18 @@ get_soilcn = function(dataset, measures = c("PH", "SOM", "TN", "TP", "TK", "AN",
     if (depth == 49.3)  depth = 49.299999
     if (depth == 82.9)  depth = 82.900002
     if (depth == 229.6) depth = 229.60001
-    if (!pat.soil %>% file.exists) {
-        msg1 <- paste0("Please download all database files from",
-                       " <http://globalchange.bnu.edu.cn/research/soil2> and unzip them into: ")
-        paste0(msg1, pat.soil, ". The file suffix may be `.nc`.") %>% stop()
-    }
     lostdb.files <- lapply(measures, function(measure){
         dbfile <- file.path(pat.soil, paste0(measure, '.nc'))
         res <- ifelse(!dbfile %>% file.exists, dbfile, NA)
     }) %>% unlist() %>% unique() %>% na.omit() %>% as.vector()
-    if (lostdb.files %>% length > 0)
-        paste(lostdb.files, collapse = ", ") %>% paste0("Can not find database files: ", .) %>% stop()
+    if (lostdb.files %>% length > 0){
+        for (f in lostdb.files){
+            paste0("No such file: ", f) %>% warning()
+        }
+        msg1 <- paste0("Please download the database files from",
+                       " <http://globalchange.bnu.edu.cn/research/soil2> and unzip them into: ")
+        paste0(msg1, pat.soil, ". The file suffix may be `.nc`.") %>% stop()
+    }
     for (i in seq(length(measures))){
         measure <- measures[i]
         soilrst <- terra::rast(file.path(pat.soil, paste0(measure, ".nc"))) %>% suppressWarnings()

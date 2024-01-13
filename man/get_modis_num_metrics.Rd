@@ -12,7 +12,7 @@ get_modis_num_metrics(
   prod.res = c(1000, 500, 250),
   prod.typ = c("Terra", "Aqua"),
   date.ran = c("2019-08-01|2019-09-01", "2020-08-01|2020-09-01"),
-  nums.job = 30,
+  nums.job = 2,
   out.dir = "microgeo_data"
 )
 }
@@ -34,7 +34,7 @@ when the measures are `NDVI` and/or `ENV`. Other MODIS image product harbor a fi
 
 \item{date.ran}{Which date range would be applied? Default is `c("2019-08-01|2019-09-01", "2020-08-01|2020-09-01")`.}
 
-\item{nums.job}{How many threads would be used for the remote-sense image merging? Default is `30`. This would consume
+\item{nums.job}{How many threads would be used for the remote-sense image merging? Default is `2`. This would consume
 a large amounts of computational resources!}
 
 \item{out.dir}{Directory path to save downloaded files. Default is `microgeo_data`}

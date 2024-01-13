@@ -10,8 +10,8 @@ calc_phylo_asmb(
   model = c("taxa.labels", "richness", "frequency", "sample.pool", "phylogeny.pool",
     "independentswap", "trialswap"),
   runs = 999,
-  nworker = 20,
-  memory.G = 100,
+  nworker = 2,
+  memory.G = 10,
   sig.bNTI = 2,
   sig.rc = 0.95,
   abundance.weighted = TRUE,
@@ -29,9 +29,9 @@ betaNTI). Default is `alpha.phylo`.}
 
 \item{runs}{How many runs would be used for calculation? Defaults is `999`.}
 
-\item{nworker}{How many threads would be used for calculation? Defaults is `20`.}
+\item{nworker}{How many threads would be used for calculation? Defaults is `2`.}
 
-\item{memory.G}{How many memory would be used for calculation? Defaults is `100` (GB).}
+\item{memory.G}{How many memory would be used for calculation? Defaults is `10` (GB).}
 
 \item{sig.bNTI}{Cutoffs for betaNTI. Required if the <type> is `beta.phylo`. Default is `2`.}
 
