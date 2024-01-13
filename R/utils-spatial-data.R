@@ -229,6 +229,8 @@ ptv_modis_products = function(prod.list, hdfs.path){
 #' @return A `data.frame` of merged remote-sensing image information.
 meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
     show_comm_msg("converting hdf files to tif files...")
+    system_info <- Sys.info()
+    is_win <- ifelse(as.character(system_info["sysname"]) == "Windows", TRUE, FALSE)
     product.names <- prod.list$product.name %>% unique(); modis.dat.all.rst <- NULL
     for (i in seq(length(product.names))){
         product.name <- product.names[i];
@@ -241,7 +243,7 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                " tif files using ", threads.use, " threads)") %>% show_comm_msg()
         cl <- parallel::makeCluster(threads.use)
         parts <- split(x = 1:nrow(ptvdata.tmp), f = 1:threads.use) %>% suppressWarnings()
-        parallel::clusterExport(cl = cl, varlist = c("ptvdata.tmp", "parts", "tifpath", "hdfpath.tmp", "%>%"),
+        parallel::clusterExport(cl = cl, varlist = c("ptvdata.tmp", "parts", "tifpath", "hdfpath.tmp", "%>%", "is_win"),
                                 envir = environment())
         parallelX <- parallel::parLapply(cl = cl, X = 1:threads.use, fun = function(x){
             dat.parts <- ptvdata.tmp[parts[[x]], ]
@@ -255,13 +257,21 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                 if (!file.exists(outfile.name)){
                     merg.list <- lapply(files, function(file){
                         sds.object <- MODIS::getSds(file); sds.names <- sds.object$SDSnames
-                        hdf.layer <- terra::rast(sds.object$SDS4gdal[which(sds.names == dat.part$sds.name)])
-                        if (dat.part$scale.factor != "NA") hdf.layer <- hdf.layer * as.numeric(dat.part$scale.factor)
+                        target.band <- sds.object$SDS4gdal[which(sds.names == dat.part$sds.name)]
+                        if (is_win){
+                            hdf.layer <- terra::rast(target.band)
+                            if (dat.part$scale.factor != "NA") hdf.layer <- hdf.layer * as.numeric(dat.part$scale.factor)
+                        }else{
+                            temp_file <- tempfile(fileext = ".tif")
+                            convert_cmd <- paste0("gdal_translate ", target.band, " ", temp_file, " > /dev/null 2>&1")
+                            system(convert_cmd); hdf.layer <- terra::rast(temp_file)
+                            if (dat.part$scale.factor != "NA") hdf.layer <- hdf.layer * as.numeric(dat.part$scale.factor)
+                        }
                         hdf.layer
                     })
                     layer.text <- paste(paste0(rep("merg.list[[", length(merg.list)),
                                                seq(length(merg.list)), rep("]]", length(merg.list))), collapse = ", ")
-                    layer.cmds <- paste0("terra::mosaic(", layer.text, ", fun = 'mean')")
+                    layer.cmds <- paste0("terra::merge(", layer.text, ")")
                     merged.layer <- parse(text = layer.cmds) %>% eval()
                     terra::writeRaster(x = merged.layer, filename = outfile.name, overwrite = TRUE)
                 }
