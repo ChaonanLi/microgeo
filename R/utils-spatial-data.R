@@ -230,7 +230,7 @@ ptv_modis_products = function(prod.list, hdfs.path){
 meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
     show_comm_msg("converting hdf files to tif files...")
     system_info <- Sys.info()
-    is_win <- ifelse(as.character(system_info["sysname"]) == "Windows", TRUE, FALSE)
+    is_win <- ifelse(as.character(system_info["sysname"]) == "Windows", TRUE, FALSE) # check whether the OS is a Windows
     product.names <- prod.list$product.name %>% unique(); modis.dat.all.rst <- NULL
     for (i in seq(length(product.names))){
         product.name <- product.names[i];
@@ -251,17 +251,18 @@ meg_modis_products = function(prod.list, ptvdata, hdfpath, threads, outpath){
                 dat.part <- dat.parts[y, ]
                 files <- list.files(hdfpath.tmp, pattern = dat.part$pattern)
                 files <- file.path(hdfpath.tmp, files)
-                outfile.name <- file.path(tifpath, paste(dat.part$product, dat.part$time,
-                                                         dat.part$version, gsub(" ", "_", dat.part$sds.name), sep = '.'))
+                filename <- paste(dat.part$product, dat.part$time, dat.part$version,
+                                  gsub(" ", "_", dat.part$sds.name), sep = '.')
+                outfile.name <- file.path(tifpath, filename)
                 outfile.name <- paste0(outfile.name, ".tif")
                 if (!file.exists(outfile.name)){
                     merg.list <- lapply(files, function(file){
                         sds.object <- MODIS::getSds(file); sds.names <- sds.object$SDSnames
                         target.band <- sds.object$SDS4gdal[which(sds.names == dat.part$sds.name)]
-                        if (is_win){
+                        if (is_win){ # If the OS is a Windows
                             hdf.layer <- terra::rast(target.band)
                             if (dat.part$scale.factor != "NA") hdf.layer <- hdf.layer * as.numeric(dat.part$scale.factor)
-                        }else{
+                        }else{ # If the OS is a Linux or a MacOS
                             temp_file <- tempfile(fileext = ".tif")
                             convert_cmd <- paste0("gdal_translate ", target.band, " ", temp_file, " > /dev/null 2>&1")
                             system(convert_cmd); hdf.layer <- terra::rast(temp_file)
