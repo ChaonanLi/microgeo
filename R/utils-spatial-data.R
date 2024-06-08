@@ -58,7 +58,7 @@ download_elev = function(res, outpath){
     elev.tiff <- paste0("wc2.1_", res.part, '_elev.tif') %>% file.path(elev.path, .)
     if (elev.tiff %>% file.exists) terra::rast(elev.tiff) %>% return ()
     zipfile <- paste0("wc2.1_", res.part, '_elev.zip')
-    downloadURL <- file.path("https://biogeo.ucdavis.edu/data/worldclim/v2.1/base", zipfile)
+    downloadURL <- file.path("https://geodata.ucdavis.edu/climate/worldclim/2_1/base", zipfile)
     downloadPAT <- file.path(elev.path, zipfile)
     if (!downloadPAT %>% file.exists) download_remote_file(url = downloadURL, destfile = downloadPAT)
     unzip(zipfile = downloadPAT, overwrite = T, exdir = elev.path)
@@ -74,7 +74,7 @@ download_his_bioc = function(res, outpath){
     bioc.path <- paste0("wc2.1_", res.part) %>% file.path(outpath, .) %>% create_dir(dirpath = .)
     zipfile <- paste0("wc2.1_", res.part, '_bio.zip')
     zippath <- file.path(bioc.path, zipfile)
-    downloadURL <- file.path("https://biogeo.ucdavis.edu/data/worldclim/v2.1/base", zipfile)
+    downloadURL <- file.path("https://geodata.ucdavis.edu/climate/worldclim/2_1/base", zipfile)
     if (!zippath %>% file.exists) download_remote_file(url = downloadURL, destfile = zippath)
     unzip(zipfile = zippath, overwrite = T, exdir = bioc.path)
     file.list <- paste0("wc2.1_", res.part, '_bio_') %>% paste0(., seq(19), '.tif') %>% file.path(bioc.path, .)
@@ -175,6 +175,15 @@ que_modis_products = function(modis.prod){
 #' @param outpath Output directory path.
 #' @return A directory path of downloaded MODIS products (HDF files).
 dow_modis_products = function(username, password, search.res, outpath){
+
+    # https://git.earthdata.nasa.gov/projects/LPDUR/repos/daac_data_download_r/browse/DAACDataDownload.R
+    usr <- ifelse(Sys.getenv("USERPROFILE") != "", Sys.getenv("USERPROFILE") %>% file.path(), Sys.getenv("HOME"))
+    netrc <- file.path(usr,'.netrc', fsep = .Platform$file.sep)  # Earthdata Login credentials
+    if (file.exists(netrc) == FALSE || grepl("urs.earthdata.nasa.gov", readLines(netrc)) == FALSE) {
+        netrc_conn <- file(netrc)
+        c("machine urs.earthdata.nasa.gov", paste0("login ", username), paste0("password ", password)) %>% writeLines(netrc_conn)
+        close(netrc_conn)
+    }
     show_comm_msg("downloading all avaliable MODIS products[skip if the file exists]...")
     hdfpath <- file.path(outpath, "modis_products", "hdf") %>% create_dir()
     res <- lapply(X = 1:nrow(search.res), function(x){
@@ -184,8 +193,12 @@ dow_modis_products = function(username, password, search.res, outpath){
         if (!file.exists(destfile)){
             paste0("current file (", x, "/", search.res %>% nrow, "): ",
                    basename(search.res[x, 5]), " (", round(search.res[x, 9], 2), " MB)") %>% show_comm_msg()
-            f <- httr::GET(search.res[x, 5], httr::authenticate(username, password),
-                           httr::progress(), httr::write_disk(destfile, overwrite = TRUE))
+            response <- httr::GET(search.res[x, 5], httr::write_disk(destfile, overwrite = TRUE), httr::progress(),
+                                 httr::config(netrc = TRUE, netrc_file = netrc),
+                                 httr::set_cookies("LC" = "cookies"))
+            if (response$status_code != 200){
+                paste0("failed to download: ", basename(search.res[x, 5])) %>% warning()
+            }
         }
     })
     return(hdfpath)
