@@ -171,7 +171,7 @@ If you use the microgeo R package for data processing and publication, please ci
 
 Chaonan Li, Chi Liu, Hankang Li, Haijun Liao, Lin Xu, Minjie Yao, Xiangzhen Li. The microgeo: an R package rapidly
 displays the biogeography of soil microbial community traits on maps. <em>FEMS Microbiology Ecology</em>, 2024, 97, 
-fiae087 ([https://doi.org/10.1093/femsec/fiae087](https://doi.org/10.1093/femsec/fiae087).
+fiae087 ([https://doi.org/10.1093/femsec/fiae087](https://doi.org/10.1093/femsec/fiae087)).
 
 ## 4. Usages
 To make it more convenient to use the microgeo R package, we not only provide detailed examples in the help document section of each function (it can be viewed by running `?function_name()` in R console), but also provide detailed [usage tutorials](https://chaonanli.github.io/microgeo/). If the microgeo R package and its dependencies have been successfully installed, you can copy and paste these demo codes into R console to run the example codes. 
