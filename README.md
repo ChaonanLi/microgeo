@@ -167,7 +167,11 @@ Having successfully installed the [microgeo](https://github.com/ChaonanLi/microg
 
 ## 3. Citation
 
-If you use microgeo Rpackage for data processing and publication of a research paper, please cite: [https://github.com/ChaonanLi/microgeo](https://github.com/ChaonanLi/microgeo) or [https://gitee.com/bioape/microgeo](https://gitee.com/bioape/microgeo).
+If you use the microgeo R package for data processing and publication, please cite it as follows: 
+
+Chaonan Li, Chi Liu, Hankang Li, Haijun Liao, Lin Xu, Minjie Yao, Xiangzhen Li. The microgeo: an R package rapidly
+displays the biogeography of soil microbial community traits on maps. <em>FEMS Microbiology Ecology</em>, 2024, 97, 
+fiae087 ([https://doi.org/10.1093/femsec/fiae087](https://doi.org/10.1093/femsec/fiae087).
 
 ## 4. Usages
 To make it more convenient to use the microgeo R package, we not only provide detailed examples in the help document section of each function (it can be viewed by running `?function_name()` in R console), but also provide detailed [usage tutorials](https://chaonanli.github.io/microgeo/). If the microgeo R package and its dependencies have been successfully installed, you can copy and paste these demo codes into R console to run the example codes. 
