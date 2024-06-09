@@ -61,8 +61,8 @@ dataset.dts <- create_dataset(mat = qtp$asv, ant = qtp$tax, met = qtp$met, map =
 dataset.dts \%>\% show_dataset()
 
 # Download classification MODIS metrics of research region
-dataset.dts \%<>\% get_modis_cla_metrics(username = "username",
-                                       password = "password", out.dir = "test/microgeo_data")
+dataset.dts \%<>\% get_modis_cla_metrics(username = "bioape.lichaonan",
+                                       password = "Tipo@cib.0905", out.dir = "test/microgeo_data")
 dataset.dts \%>\% show_dataset()
 
 # Visualize LC_Type1
