@@ -164,16 +164,7 @@ source(system.file("scripts", "install-extra-pkgs.R", package = "microgeo"))
 
 Having successfully installed the [microgeo](https://github.com/ChaonanLi/microgeo) R package, we can now delve into using it to create geographic maps. However, it is important to note that several functions may require significant computational resources. Personal computers might not meet the computational demands, so we recommend users to utilize these functions from the [microgeo](https://github.com/ChaonanLi/microgeo) R package on a workstation or server. 
 
-
-## 3. Citation
-
-If you use the microgeo R package for data processing and publication, please cite it as follows: 
-
-Chaonan Li, Chi Liu, Hankang Li, Haijun Liao, Lin Xu, Minjie Yao, Xiangzhen Li. The microgeo: an R package rapidly
-displays the biogeography of soil microbial community traits on maps. <em>FEMS Microbiology Ecology</em>, 2024, 97, 
-fiae087 ([https://doi.org/10.1093/femsec/fiae087](https://doi.org/10.1093/femsec/fiae087)).
-
-## 4. Usages
+## 3. Usages
 To make it more convenient to use the microgeo R package, we not only provide detailed examples in the help document section of each function (it can be viewed by running `?function_name()` in R console), but also provide detailed [usage tutorials](https://chaonanli.github.io/microgeo/). If the microgeo R package and its dependencies have been successfully installed, you can copy and paste these demo codes into R console to run the example codes. 
 
 Besides, we also provide the [JupyterLab Notebook version](https://github.com/ChaonanLi/chaonanli.github.io/tree/main/microgeo/jupyter) of tutorials. If the JupyterLab is avaliable on your PC or server, you can directly run the examples in these Notebooks.
