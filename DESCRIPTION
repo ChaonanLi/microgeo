@@ -13,7 +13,7 @@ Author: Chaonan Li [aut, cre], Chi Liu[ctb], Hankang Li[ctb], Haijun Liao [ctb],
 Maintainer: Chaonan Li <licn@mtc.edu.cn>
 Description: An R package rapidly displays the biogeography of soil microbial community traits on maps.
 URL: https://github.com/ChaonanLi/microgeo
-License: BSD_3-Clause LICENSE
+License: GPL-3
 LazyData: true
 Encoding: UTF-8
 NeedsCompilation: no
