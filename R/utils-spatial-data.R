@@ -179,11 +179,11 @@ dow_modis_products = function(username, password, search.res, outpath){
     # https://git.earthdata.nasa.gov/projects/LPDUR/repos/daac_data_download_r/browse/DAACDataDownload.R
     usr <- ifelse(Sys.getenv("USERPROFILE") != "", Sys.getenv("USERPROFILE") %>% file.path(), Sys.getenv("HOME"))
     netrc <- file.path(usr,'.netrc', fsep = .Platform$file.sep)  # Earthdata Login credentials
-    if (file.exists(netrc) == FALSE || any(grepl("urs.earthdata.nasa.gov", readLines(netrc))) == FALSE) {
-        netrc_conn <- file(netrc)
-        c("machine urs.earthdata.nasa.gov", paste0("login ", username), paste0("password ", password)) %>% writeLines(netrc_conn)
-        close(netrc_conn)
-    }
+    #if (file.exists(netrc) == FALSE || any(grepl("urs.earthdata.nasa.gov", readLines(netrc))) == FALSE) {
+    netrc_conn <- file(netrc)
+    c("machine urs.earthdata.nasa.gov", paste0("login ", username), paste0("password ", password)) %>% writeLines(netrc_conn)
+    close(netrc_conn)
+    #}
     show_comm_msg("downloading all avaliable MODIS products[skip if the file exists]...")
     hdfpath <- file.path(outpath, "modis_products", "hdf") %>% create_dir()
     res <- lapply(X = 1:nrow(search.res), function(x){
