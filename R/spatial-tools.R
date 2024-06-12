@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------------------------------------------------
-# Copyright (c) 2023, microgeo/Chaonan Li (licn@mtc.edu.cn).                                                           #
-# The microgeo is distributed under the terms of the Modified BSD License.                                              #
+# Copyright (c) 2023, microgeo/Chaonan Li (licn@mtc.edu.cn).                                                            #
+# The microgeo is distributed under the terms of the GPL-3 License.                                                     #
 # Full license is avaliable in the file LICENSE, distributed with this package.                                         #
 # -----------------------------------------------------------------------------------------------------------------------
 
