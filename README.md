@@ -15,10 +15,12 @@ The [microgeo](https://github.com/ChaonanLi/microgeo) R package has been tested 
 |AMD EPYC 7Y43      |8 cores 16 threads     |16	         |Windows 11 (Virtual Machine) |x86          |4.3.2         |
 |Intel Core i5-5350U|2 cores 4 threads      |8	         |macOS 12.7.2                 |x86          |4.3.2         |
 |Apple M2 Pro       |10 cores 20 threads    |16          |macOS 14.0                   |arm          |4.3.2         |
+|Apple M2 Pro       |10 cores 20 threads    |16          |macOS 14.5                   |arm          |4.3.2         |
 |Apple M2           |8 cores 16 threads     |16	         |macOS 13.5.2                 |arm          |4.3.2         |
 |AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 18.04                 |x86          |4.1.0 to 4.3.2|
 |AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 20.04                 |x86          |4.1.0 to 4.3.2|
 |AMD EPYC 7Y43      |92 cores 192 threads   |1024        |Ubuntu 22.04                 |x86          |4.1.0 to 4.3.2|
+|AMD EPYC 7542      |64 cores 128 threads   |1024        |Ubuntu 22.04                 |x86          |4.3.3         |
 
 Before installing the [microgeo](https://github.com/ChaonanLi/microgeo) R package, there are a few additional steps to take. Here, we present the installation procedures on the three major operating systems.
 
