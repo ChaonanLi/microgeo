@@ -14,37 +14,50 @@
 #' represents Xizang, Qinghai, and Sichuan. You can visit the `http://datav.aliyun.com/portal/school/atlas/area_selector`
 #' to select one or mutiple adcodes for your interested areas. Default is `c(540000, 630000, 510000)`.
 #' @param crs.string Coordinate Reference System (CRS). Default is `"EPSG:4326"`.
+#' @param include_sub_areas Include subareas? Default is `FALSE`
 #' @return A `SpatialPolygonsDataFrame`.
 #' @seealso \code{\link[microgeo:plot_bmap]{microgeo::plot_bmap()}}
 #' @examples
-#' ## Example 1: using one adcode
-#' map <- read_aliyun_map(adcode = 650000)
+#' ## Example 1: using one adcode for Xinjiang map
+#' map <- read_aliyun_map(adcode = 100000, include_sub_areas = TRUE)
 #' head(map@data)
 #' map %>% plot_bmap()
 #'
-#' ## Example 1: using mutiple adcodes
-#' map <- read_aliyun_map(adcode = c(540000, 630000, 510000))
+#' ## Example 2: using one adcode for China map
+#' map <- read_aliyun_map(adcode = 650000, include_sub_areas = TRUE)
+#' head(map@data)
+#' map %>% plot_bmap()
+#'
+#' ## Example 3: using mutiple adcodes
+#' map <- read_aliyun_map(adcode = c(540000, 630000, 510000), include_sub_areas = TRUE)
 #' head(map@data)
 #' map %>% plot_bmap()
 #' @export
-read_aliyun_map = function(adcode = c(540000, 630000, 510000), crs.string = "EPSG:4326"){
+read_aliyun_map = function(adcode = c(540000, 630000, 510000), crs.string = "EPSG:4326", include_sub_areas = FALSE){
     base.url <- "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code="
+    is_windows <- Sys.info()[["sysname"]] == "Windows"
     if (adcode %>% length == 1){
-        map <- paste0(base.url, adcode) %>% sf::read_sf() %>% sf::as_Spatial()
-        # address bugs in windows
-        if (length(sf::st_is_valid(sf::st_as_sf(map))) > 1 || !sf::st_is_valid(sf::st_as_sf(map))){
-            unio.sp <- rgeos::gUnaryUnion(map) %>% suppressWarnings() %>%
-                suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
-            map <- sp::SpatialPolygonsDataFrame(unio.sp, data = data.frame(map@data, row.names = rownames(map@data)))
+        map_url <- paste0(base.url, adcode %>% format(scientific = F))
+        if (include_sub_areas) map_url %<>% paste0('_full')
+        map <- map_url %>% sf::read_sf() %>% sf::as_Spatial()
+        if (is_windows) { # address bugs in windows
+            if (length(sf::st_is_valid(sf::st_as_sf(map))) > 1 || !sf::st_is_valid(sf::st_as_sf(map))){
+                unio.sp <- rgeos::gUnaryUnion(map) %>% suppressWarnings() %>%
+                    suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
+                map <- sp::SpatialPolygonsDataFrame(unio.sp, data = data.frame(map@data, row.names = rownames(map@data)))
+            }
         }
     }else{
         map <- lapply(adcode, function(code){
-            map.tmp <- paste0(base.url, code) %>% sf::read_sf() %>% sf::as_Spatial()
-            # address bugs in windows
-            if (length(sf::st_is_valid(sf::st_as_sf(map.tmp))) > 1 || !sf::st_is_valid(sf::st_as_sf(map.tmp))){
-                unio.sp <- rgeos::gUnaryUnion(map.tmp) %>% suppressWarnings() %>%
-                    suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
-                map.tmp <- sp::SpatialPolygonsDataFrame(unio.sp, data = data.frame(map.tmp@data, row.names = rownames(map.tmp@data)))
+            map_url <- paste0(base.url, code %>% format(scientific = F))
+            if (include_sub_areas) map_url %<>% paste0('_full')
+            map.tmp <- map_url %>% sf::read_sf() %>% sf::as_Spatial()
+            if (is_windows) { # address bugs in windows
+                if (length(sf::st_is_valid(sf::st_as_sf(map.tmp))) > 1 || !sf::st_is_valid(sf::st_as_sf(map.tmp))){
+                    unio.sp <- rgeos::gUnaryUnion(map.tmp) %>% suppressWarnings() %>%
+                        suppressMessages() %>% sf::st_as_sf() %>% as(., "Spatial")
+                    map.tmp <- sp::SpatialPolygonsDataFrame(unio.sp, data = data.frame(map.tmp@data, row.names = rownames(map.tmp@data)))
+                }
             }
             map.tmp <- map.tmp %>% sf::st_as_sf() %>% dplyr::as_tibble()
         }) %>% do.call('rbind', .) %>% sf::st_as_sf() %>% sf::as_Spatial()
