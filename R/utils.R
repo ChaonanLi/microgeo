@@ -86,7 +86,7 @@ check_dataset = function(dataset){
 #' @param map.layer A ggplot2 object. It is expected to be a `gg` class.
 check_ggplot2_object = function(map.layer){
     msg <- "The <map.layer> must be a `ggplot2` object!"
-    if (map.layer %>% class %>% length != 2) msg %>% stop()
+    #if (map.layer %>% class %>% length != 2) msg %>% stop()
     if (class(map.layer)[1] != "ggplot2::ggplot" || class(map.layer)[2] != "ggplot") msg %>% stop()
 }
 
